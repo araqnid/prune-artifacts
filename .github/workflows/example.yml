@@ -1,5 +1,5 @@
 name: "Example"
-on: [workflow_dispatch]
+on: [push]
 
 permissions:
   contents: read
@@ -9,10 +9,7 @@ jobs:
   prune-artifacts:
     runs-on: ubuntu-latest
     steps:
-      - uses: araqnid/prune-artifacts@v1
-        with:
-          min-age: 3d
-          min-size: 1Mb
-          name: big_artifact
+      - name: Prune artifacts
+        uses: araqnid/prune-artifacts@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
