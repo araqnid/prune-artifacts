@@ -1,0 +1,17 @@
+name: 'Prune Artifacts'
+description: 'Prune old artifacts based on age and size'
+inputs:
+  min-age:
+    description: 'Prune artifacts that are at least this old'
+    required: true
+    default: '1d'
+  min-size:
+    description: 'Prune artifacts that are at least this large'
+    required: true
+    default: '1048576'
+  name:
+    description: 'Prune only artifacts with this specific name. May be a comma-separated list to match multiple names'
+    required: false
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
