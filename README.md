@@ -12,6 +12,10 @@ A packaged distributable is written into `dist` by running `./gradlew package`.
 An example:
 
 ```yaml
+permissions:
+  contents: read
+  actions: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
