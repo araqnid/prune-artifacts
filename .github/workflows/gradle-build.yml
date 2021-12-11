@@ -11,6 +11,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'zulu'
-      - uses: gradle/gradle-command-action@v2
+      - name: Build
+        uses: gradle/gradle-command-action@v2
         with:
           arguments: build
