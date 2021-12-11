@@ -17,10 +17,11 @@ permissions:
   actions: write
 
 jobs:
-  build:
+  prune-artifacts:
     runs-on: ubuntu-latest
     steps:
-      - uses: araqnid/prune-artifacts@v1
+      - name: Prune artifacts
+        uses: araqnid/prune-artifacts@v1
         with:
           min-age: 3d
           min-size: 1Mb

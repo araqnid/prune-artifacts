@@ -6,7 +6,7 @@ permissions:
   actions: write
 
 jobs:
-  build:
+  prune-artifacts:
     runs-on: ubuntu-latest
     steps:
       - uses: araqnid/prune-artifacts@v1
