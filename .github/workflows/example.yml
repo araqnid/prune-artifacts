@@ -1,0 +1,14 @@
+name: "Example"
+on: [workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: araqnid/prune-artifacts
+        with:
+          min-age: 3d
+          min-size: 1Mb
+          name: big_artifact
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
