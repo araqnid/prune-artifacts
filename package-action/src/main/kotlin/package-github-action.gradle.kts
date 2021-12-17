@@ -151,6 +151,10 @@ val packageWithNccTask = tasks.register("packageDistributableWithNCC") {
     val jsBuildFile = jsBuildOutput.resolve("packages/$actionModule/kotlin/$actionModule.js")
 
     inputs.file(jsBuildFile)
+    inputs.property("minify", extension.minify)
+    inputs.property("v8cache", extension.v8cache)
+    inputs.property("target", extension.target.orElse(""))
+    inputs.property("nodeVersion", extension.nodeVersion) // could be important when generating v8 caches
     outputs.dir(distDir)
 
     doLast {
