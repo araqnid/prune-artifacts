@@ -20,16 +20,18 @@ val packageExplodedTask = tasks.register("packageDistributableExploded") {
 }
 
 val installNccTask = tasks.register("installNCC") {
-    val toolDir = file("build").resolve(name)
-    outputs.upToDateWhen {
-        toolDir.resolve("package.json").exists()
-    }
+    doNotTrackState("Running NCC updates cache files and defeats output tracking")
+    val toolDir = buildDir.resolve(name)
+    val nccScript = toolDir.resolve("node_modules/@vercel/ncc/dist/ncc/cli.js")
 
     doLast {
-        exec {
-            workingDir = toolDir
-            commandLine("npm", "install", "@vercel/ncc")
+        if (!nccScript.exists()) {
+            exec {
+                workingDir = toolDir
+                commandLine("npm", "install", "@vercel/ncc")
+            }
         }
+        check(nccScript.exists()) { "npm install did not produce a @vercel/ncc executable" }
     }
 }
 
