@@ -30,3 +30,7 @@ dependencies {
     testImplementation(kotlin("test-js"))
     testImplementation("org.araqnid.kotlin.assert-that:assert-that:0.1.1")
 }
+
+actionPackaging {
+    nodeVersion.set("12.22.8")
+}
