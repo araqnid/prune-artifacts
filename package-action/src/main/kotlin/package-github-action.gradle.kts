@@ -1,5 +1,7 @@
 val actionModule = project.name
 
+val extension = extensions.create<PackageGithubActionExtension>("nodeJsApplication")
+
 val packageExplodedTask = tasks.register("packageDistributableExploded") {
     group = "package"
     description = "Package action using a node_modules directory"
@@ -51,13 +53,28 @@ val packageWithNccTask = tasks.register("packageDistributableWithNCC") {
     outputs.dir(distDir)
 
     doLast {
+        delete {
+            delete(distDir)
+        }
         exec {
-            commandLine(
+            val params = mutableListOf(
                 "node",
                 toolDir.resolve("node_modules/@vercel/ncc/dist/ncc/cli.js"),
                 "build",
-                jsBuildFile
+                jsBuildFile,
+                "-o",
+                distDir,
             )
+            if (extension.minify.get()) {
+                params += listOf("-m", "--license", "LICENSE.txt")
+            }
+            if (extension.v8cache.get()) {
+                params += listOf("--v8-cache")
+            }
+            if (extension.target.isPresent) {
+                params += listOf("--target", extension.target.get())
+            }
+            commandLine(params)
         }
     }
 }
