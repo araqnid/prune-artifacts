@@ -33,4 +33,5 @@ dependencies {
 
 actionPackaging {
     nodeVersion.set("12.22.8")
+    minify.set(false)
 }
