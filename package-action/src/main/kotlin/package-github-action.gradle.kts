@@ -177,7 +177,7 @@ val packageWithNccTask = tasks.register("packageDistributableWithNCC") {
     }
 }
 
-tasks.register("package") {
+val packageTask = tasks.register("package") {
     group = "package"
     description = "Produce dist directory with all dependencies for GitHub Actions"
 
@@ -188,4 +188,8 @@ tasks.register("package") {
             else -> error("Unhandled githubAction.package value: $packageStyle")
         }
     )
+}
+
+tasks.named("assemble").configure {
+    dependsOn(packageTask)
 }
