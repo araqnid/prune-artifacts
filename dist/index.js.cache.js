@@ -12497,7 +12497,7 @@ exports.debug = debug; // for test
     $l$block_1: {
       var tmp0__anonymous__1_2495602521 = $cont;
       var oldContext_2 = tmp0__anonymous__1_2495602521._get_context__1558698818_ps0bpe_k$();
-      var newContext_3 = oldContext_2.plus_rgw9wi_k$(context);
+      var newContext_3 = newCoroutineContext(oldContext_2, context);
       ensureActive(newContext_3);
       if (newContext_3 === oldContext_2) {
         var coroutine_4 = new ScopeCoroutine(newContext_3, tmp0__anonymous__1_2495602521);
@@ -13782,7 +13782,6 @@ exports.debug = debug; // for test
   };
   function Key_2() {
     Key_instance_1 = this;
-    initializeDefaultExceptionHandlers();
   }
   Key_2.$metadata$ = {
     simpleName: 'Key',
@@ -17186,6 +17185,9 @@ exports.debug = debug; // for test
   function toDebugString(_this__1828080292) {
     return toString_0(_this__1828080292);
   }
+  function newCoroutineContext(_this__1828080292, addedContext) {
+    return _this__1828080292.plus_rgw9wi_k$(addedContext);
+  }
   function UndispatchedCoroutine(context, uCont) {
     ScopeCoroutine.call(this, context, uCont);
   }
@@ -17199,8 +17201,6 @@ exports.debug = debug; // for test
   };
   function _get_coroutineName__3134708654(_this__1828080292) {
     return null;
-  }
-  function initializeDefaultExceptionHandlers() {
   }
   function handleCoroutineExceptionImpl(context, exception) {
     console.error(exception);
