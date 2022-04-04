@@ -21,7 +21,7 @@ dependencies {
     implementation(npm("@actions/core", "latest"))
     implementation(npm("@actions/cache", "latest"))
     implementation(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.0"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
 
     testImplementation(kotlin("test-js"))
     testImplementation("org.araqnid.kotlin.assert-that:assert-that:0.1.1")
