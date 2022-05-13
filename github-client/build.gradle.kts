@@ -22,7 +22,7 @@ dependencies {
     api(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.0"))
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
     implementation(platform("org.jetbrains.kotlinx:kotlinx-serialization-bom:1.3.2"))
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
 
     testImplementation(kotlin("test-js"))
     testImplementation("org.araqnid.kotlin.assert-that:assert-that:0.1.1")
