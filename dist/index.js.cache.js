@@ -2169,6 +2169,10 @@ exports.debug = debug; // for test
   function coerceAtLeast(_this__1828080292, minimumValue) {
     return _this__1828080292 < minimumValue ? minimumValue : _this__1828080292;
   }
+  function step(_this__1828080292, step) {
+    checkStepIsPositive(step > 0, step);
+    return Companion_getInstance_3().fromClosedRange_vhxzyy_k$(_this__1828080292._get_first__3232921377_hkbbvj_k$(), _this__1828080292._get_last__802328181_d9oodx_k$(), _this__1828080292._get_step__809345279_ddv2tb_k$() > 0 ? step : -step | 0);
+  }
   function coerceAtMost(_this__1828080292, maximumValue) {
     return _this__1828080292 > maximumValue ? maximumValue : _this__1828080292;
   }
@@ -2183,10 +2187,6 @@ exports.debug = debug; // for test
   }
   function downTo(_this__1828080292, to) {
     return Companion_getInstance_3().fromClosedRange_vhxzyy_k$(_this__1828080292, to, -1);
-  }
-  function step(_this__1828080292, step) {
-    checkStepIsPositive(step > 0, step);
-    return Companion_getInstance_3().fromClosedRange_vhxzyy_k$(_this__1828080292._get_first__3232921377_hkbbvj_k$(), _this__1828080292._get_last__802328181_d9oodx_k$(), _this__1828080292._get_step__809345279_ddv2tb_k$() > 0 ? step : -step | 0);
   }
   function asIterable(_this__1828080292) {
     var tmp$ret$0;
@@ -3115,6 +3115,9 @@ exports.debug = debug; // for test
     var tmp = EmptyMap_getInstance();
     return isInterface(tmp, Map) ? tmp : THROW_CCE();
   }
+  function getValue(_this__1828080292, key) {
+    return getOrImplicitDefault(_this__1828080292, key);
+  }
   function toMap(_this__1828080292) {
     if (isInterface(_this__1828080292, Collection)) {
       var tmp0_subject = _this__1828080292._get_size__809037418_ddoh9m_k$();
@@ -3292,9 +3295,6 @@ exports.debug = debug; // for test
       break $l$block;
     }
     return tmp$ret$0;
-  }
-  function getValue(_this__1828080292, key) {
-    return getOrImplicitDefault(_this__1828080292, key);
   }
   function removeLast(_this__1828080292) {
     var tmp;
@@ -3892,6 +3892,13 @@ exports.debug = debug; // for test
     simpleName: 'KClassifier',
     kind: 'interface',
     interfaces: []
+  };
+  function KTypeParameter() {
+  }
+  KTypeParameter.$metadata$ = {
+    simpleName: 'KTypeParameter',
+    kind: 'interface',
+    interfaces: [KClassifier]
   };
   function appendElement(_this__1828080292, element, transform) {
     if (!(transform == null)) {
@@ -9094,19 +9101,12 @@ exports.debug = debug; // for test
     kind: 'interface',
     interfaces: []
   };
-  function MutableList() {
+  function Collection() {
   }
-  MutableList.$metadata$ = {
-    simpleName: 'MutableList',
+  Collection.$metadata$ = {
+    simpleName: 'Collection',
     kind: 'interface',
-    interfaces: [List, MutableCollection]
-  };
-  function Set() {
-  }
-  Set.$metadata$ = {
-    simpleName: 'Set',
-    kind: 'interface',
-    interfaces: [Collection]
+    interfaces: [Iterable]
   };
   function MutableEntry() {
   }
@@ -9122,12 +9122,19 @@ exports.debug = debug; // for test
     kind: 'interface',
     interfaces: [Map]
   };
-  function Collection() {
+  function MutableList() {
   }
-  Collection.$metadata$ = {
-    simpleName: 'Collection',
+  MutableList.$metadata$ = {
+    simpleName: 'MutableList',
     kind: 'interface',
-    interfaces: [Iterable]
+    interfaces: [List, MutableCollection]
+  };
+  function Set() {
+  }
+  Set.$metadata$ = {
+    simpleName: 'Set',
+    kind: 'interface',
+    interfaces: [Collection]
   };
   function MutableCollection() {
   }
@@ -10910,6 +10917,23 @@ exports.debug = debug; // for test
   function contentHashCode(_this__1828080292) {
     return contentHashCodeInternal(_this__1828080292);
   }
+  function copyOf_7(_this__1828080292, newSize) {
+    {
+      var tmp0_require_0 = newSize >= 0;
+      {
+      }
+      if (!tmp0_require_0) {
+        var tmp$ret$0;
+        $l$block: {
+          tmp$ret$0 = 'Invalid new array size: ' + newSize + '.';
+          break $l$block;
+        }
+        var message_1 = tmp$ret$0;
+        throw IllegalArgumentException_init_$Create$_0(toString_2(message_1));
+      }
+    }
+    return arrayCopyResize(_this__1828080292, newSize, null);
+  }
   function decodeVarLenBase64(base64, fromBase64, resultLength) {
     var result = new Int32Array(resultLength);
     var index = 0;
@@ -11947,7 +11971,8 @@ exports.debug = debug; // for test
   _.$crossModule$.copyOf_4 = copyOf_5;
   _.$crossModule$.copyOf_5 = copyOf_0;
   _.$crossModule$.copyOf_6 = copyOf_1;
-  _.$crossModule$.copyOf_7 = copyOf_3;
+  _.$crossModule$.copyOf_7 = copyOf_7;
+  _.$crossModule$.copyOf_8 = copyOf_3;
   _.$crossModule$.copyToArray = copyToArray;
   _.$crossModule$.emptyList = emptyList;
   _.$crossModule$.emptyMap = emptyMap;
@@ -12030,6 +12055,7 @@ exports.debug = debug; // for test
   _.$crossModule$.KClass = KClass;
   _.$crossModule$.KProperty0 = KProperty0;
   _.$crossModule$.KProperty1 = KProperty1;
+  _.$crossModule$.KTypeParameter = KTypeParameter;
   _.$crossModule$.equals_1 = equals_0;
   _.$crossModule$.isBlank = isBlank;
   _.$crossModule$.isLowerCase = isLowerCase;
@@ -12062,6 +12088,7 @@ exports.debug = debug; // for test
   _.$crossModule$.isFinite_1 = isFinite;
   _.$crossModule$.lazy = lazy;
   _.$crossModule$.lazy_1 = lazy_0;
+  _.$crossModule$.plus_2 = plus_1;
   _.$crossModule$.throwUninitializedPropertyAccessException = throwUninitializedPropertyAccessException;
   _.$crossModule$.toString_2 = toString_1;
   _.$crossModule$.to = to;
@@ -17550,14 +17577,14 @@ exports.debug = debug; // for test
   //region block: imports
   var imul = Math.imul;
   var StringCompanionObject_getInstance = kotlin_kotlin.$crossModule$.StringCompanionObject_getInstance;
+  var Unit_getInstance = kotlin_kotlin.$crossModule$.Unit_getInstance;
   var emptyList = kotlin_kotlin.$crossModule$.emptyList;
   var LazyThreadSafetyMode_PUBLICATION_getInstance = kotlin_kotlin.$crossModule$.LazyThreadSafetyMode_PUBLICATION_getInstance;
   var lazy = kotlin_kotlin.$crossModule$.lazy;
-  var Unit_getInstance = kotlin_kotlin.$crossModule$.Unit_getInstance;
   var KProperty1 = kotlin_kotlin.$crossModule$.KProperty1;
   var getPropertyCallableRef = kotlin_kotlin.$crossModule$.getPropertyCallableRef;
-  var captureStack = kotlin_kotlin.$crossModule$.captureStack;
   var IllegalArgumentException_init_$Init$ = kotlin_kotlin.$crossModule$.IllegalArgumentException_init_$Init$;
+  var captureStack = kotlin_kotlin.$crossModule$.captureStack;
   var IllegalArgumentException_init_$Init$_0 = kotlin_kotlin.$crossModule$.IllegalArgumentException_init_$Init$_1;
   var IllegalArgumentException = kotlin_kotlin.$crossModule$.IllegalArgumentException;
   var collectionSizeOrDefault = kotlin_kotlin.$crossModule$.collectionSizeOrDefault;
@@ -17609,22 +17636,23 @@ exports.debug = debug; // for test
   var toIntOrNull = kotlin_kotlin.$crossModule$.toIntOrNull;
   var hashCode = kotlin_kotlin.$crossModule$.hashCode;
   var IllegalStateException_init_$Create$ = kotlin_kotlin.$crossModule$.IllegalStateException_init_$Create$;
+  var asList = kotlin_kotlin.$crossModule$.asList;
   var ArrayList_init_$Create$_1 = kotlin_kotlin.$crossModule$.ArrayList_init_$Create$_2;
+  var isArray = kotlin_kotlin.$crossModule$.isArray;
+  var step = kotlin_kotlin.$crossModule$.step;
+  var getValue = kotlin_kotlin.$crossModule$.getValue;
+  var LinkedHashMap_init_$Create$ = kotlin_kotlin.$crossModule$.LinkedHashMap_init_$Create$;
+  var LinkedHashMap_init_$Create$_0 = kotlin_kotlin.$crossModule$.LinkedHashMap_init_$Create$_1;
+  var HashMap_init_$Create$ = kotlin_kotlin.$crossModule$.HashMap_init_$Create$_1;
+  var HashMap_init_$Create$_0 = kotlin_kotlin.$crossModule$.HashMap_init_$Create$_2;
   var LinkedHashSet_init_$Create$ = kotlin_kotlin.$crossModule$.LinkedHashSet_init_$Create$;
   var LinkedHashSet_init_$Create$_0 = kotlin_kotlin.$crossModule$.LinkedHashSet_init_$Create$_1;
   var HashSet_init_$Create$_0 = kotlin_kotlin.$crossModule$.HashSet_init_$Create$_2;
-  var HashMap_init_$Create$ = kotlin_kotlin.$crossModule$.HashMap_init_$Create$_1;
-  var HashMap_init_$Create$_0 = kotlin_kotlin.$crossModule$.HashMap_init_$Create$_2;
-  var LinkedHashMap_init_$Create$ = kotlin_kotlin.$crossModule$.LinkedHashMap_init_$Create$;
-  var LinkedHashMap_init_$Create$_0 = kotlin_kotlin.$crossModule$.LinkedHashMap_init_$Create$_1;
-  var step = kotlin_kotlin.$crossModule$.step;
-  var getValue = kotlin_kotlin.$crossModule$.getValue;
-  var asList = kotlin_kotlin.$crossModule$.asList;
-  var isArray = kotlin_kotlin.$crossModule$.isArray;
   var longArray = kotlin_kotlin.$crossModule$.longArray;
   var Companion_getInstance = kotlin_kotlin.$crossModule$.Companion_getInstance_1;
   var _get_lastIndex__339712501 = kotlin_kotlin.$crossModule$._get_lastIndex__339712501;
   var countTrailingZeroBits = kotlin_kotlin.$crossModule$.countTrailingZeroBits;
+  var KTypeParameter = kotlin_kotlin.$crossModule$.KTypeParameter;
   var HashSet_init_$Create$_1 = kotlin_kotlin.$crossModule$.HashSet_init_$Create$;
   var contentHashCode = kotlin_kotlin.$crossModule$.contentHashCode;
   var arrayIterator = kotlin_kotlin.$crossModule$.arrayIterator;
@@ -17652,7 +17680,7 @@ exports.debug = debug; // for test
   var copyOf_0 = kotlin_kotlin.$crossModule$.copyOf_5;
   var copyOf_1 = kotlin_kotlin.$crossModule$.copyOf_6;
   var copyOf_2 = kotlin_kotlin.$crossModule$.copyOf_1;
-  var copyOf_3 = kotlin_kotlin.$crossModule$.copyOf_7;
+  var copyOf_3 = kotlin_kotlin.$crossModule$.copyOf_8;
   var copyOf_4 = kotlin_kotlin.$crossModule$.copyOf;
   var copyOf_5 = kotlin_kotlin.$crossModule$.copyOf_4;
   var copyOf_6 = kotlin_kotlin.$crossModule$.copyOf_2;
@@ -17750,36 +17778,38 @@ exports.debug = debug; // for test
   }
   PrimitiveArrayDescriptor.prototype = Object.create(ListLikeDescriptor.prototype);
   PrimitiveArrayDescriptor.prototype.constructor = PrimitiveArrayDescriptor;
+  ArrayClassDesc.prototype = Object.create(ListLikeDescriptor.prototype);
+  ArrayClassDesc.prototype.constructor = ArrayClassDesc;
+  LinkedHashMapClassDesc.prototype = Object.create(MapLikeDescriptor.prototype);
+  LinkedHashMapClassDesc.prototype.constructor = LinkedHashMapClassDesc;
+  HashMapClassDesc.prototype = Object.create(MapLikeDescriptor.prototype);
+  HashMapClassDesc.prototype.constructor = HashMapClassDesc;
   ArrayListClassDesc.prototype = Object.create(ListLikeDescriptor.prototype);
   ArrayListClassDesc.prototype.constructor = ArrayListClassDesc;
   LinkedHashSetClassDesc.prototype = Object.create(ListLikeDescriptor.prototype);
   LinkedHashSetClassDesc.prototype.constructor = LinkedHashSetClassDesc;
   HashSetClassDesc.prototype = Object.create(ListLikeDescriptor.prototype);
   HashSetClassDesc.prototype.constructor = HashSetClassDesc;
-  HashMapClassDesc.prototype = Object.create(MapLikeDescriptor.prototype);
-  HashMapClassDesc.prototype.constructor = HashMapClassDesc;
-  LinkedHashMapClassDesc.prototype = Object.create(MapLikeDescriptor.prototype);
-  LinkedHashMapClassDesc.prototype.constructor = LinkedHashMapClassDesc;
-  ArrayClassDesc.prototype = Object.create(ListLikeDescriptor.prototype);
-  ArrayClassDesc.prototype.constructor = ArrayClassDesc;
-  ListLikeSerializer.prototype = Object.create(AbstractCollectionSerializer.prototype);
-  ListLikeSerializer.prototype.constructor = ListLikeSerializer;
-  PrimitiveArraySerializer.prototype = Object.create(ListLikeSerializer.prototype);
+  CollectionLikeSerializer.prototype = Object.create(AbstractCollectionSerializer.prototype);
+  CollectionLikeSerializer.prototype.constructor = CollectionLikeSerializer;
+  PrimitiveArraySerializer.prototype = Object.create(CollectionLikeSerializer.prototype);
   PrimitiveArraySerializer.prototype.constructor = PrimitiveArraySerializer;
-  ArrayListSerializer.prototype = Object.create(ListLikeSerializer.prototype);
-  ArrayListSerializer.prototype.constructor = ArrayListSerializer;
-  LinkedHashSetSerializer.prototype = Object.create(ListLikeSerializer.prototype);
-  LinkedHashSetSerializer.prototype.constructor = LinkedHashSetSerializer;
-  HashSetSerializer.prototype = Object.create(ListLikeSerializer.prototype);
-  HashSetSerializer.prototype.constructor = HashSetSerializer;
+  ReferenceArraySerializer.prototype = Object.create(CollectionLikeSerializer.prototype);
+  ReferenceArraySerializer.prototype.constructor = ReferenceArraySerializer;
+  CollectionSerializer.prototype = Object.create(CollectionLikeSerializer.prototype);
+  CollectionSerializer.prototype.constructor = CollectionSerializer;
   MapLikeSerializer.prototype = Object.create(AbstractCollectionSerializer.prototype);
   MapLikeSerializer.prototype.constructor = MapLikeSerializer;
-  HashMapSerializer.prototype = Object.create(MapLikeSerializer.prototype);
-  HashMapSerializer.prototype.constructor = HashMapSerializer;
   LinkedHashMapSerializer.prototype = Object.create(MapLikeSerializer.prototype);
   LinkedHashMapSerializer.prototype.constructor = LinkedHashMapSerializer;
-  ReferenceArraySerializer.prototype = Object.create(ListLikeSerializer.prototype);
-  ReferenceArraySerializer.prototype.constructor = ReferenceArraySerializer;
+  HashMapSerializer.prototype = Object.create(MapLikeSerializer.prototype);
+  HashMapSerializer.prototype.constructor = HashMapSerializer;
+  ArrayListSerializer.prototype = Object.create(CollectionSerializer.prototype);
+  ArrayListSerializer.prototype.constructor = ArrayListSerializer;
+  LinkedHashSetSerializer.prototype = Object.create(CollectionSerializer.prototype);
+  LinkedHashSetSerializer.prototype.constructor = LinkedHashSetSerializer;
+  HashSetSerializer.prototype = Object.create(CollectionSerializer.prototype);
+  HashSetSerializer.prototype.constructor = HashSetSerializer;
   function typeParametersSerializers() {
     return _get_EMPTY_SERIALIZER_ARRAY__3941305005();
   }
@@ -17861,6 +17891,7 @@ exports.debug = debug; // for test
       var tmp_2 = buildSerialDescriptor$default(tmp_0, tmp_1, [], null, 12, null);
       $this$buildSerialDescriptor.element$default_m7h690_k$('value', tmp_2, null, false, 12, null);
       $this$buildSerialDescriptor._set_annotations__74516833_7ksc49_k$(this$0._annotations_1);
+      return Unit_getInstance();
     };
   }
   function PolymorphicSerializer$descriptor$delegate$lambda(this$0) {
@@ -17926,24 +17957,6 @@ exports.debug = debug; // for test
     kind: 'interface',
     interfaces: []
   };
-  function UnknownFieldException_init_$Init$(index, $this) {
-    UnknownFieldException.call($this, 'An unknown field for index ' + index);
-    return $this;
-  }
-  function UnknownFieldException_init_$Create$(index) {
-    var tmp = UnknownFieldException_init_$Init$(index, Object.create(UnknownFieldException.prototype));
-    captureStack(tmp, UnknownFieldException_init_$Create$);
-    return tmp;
-  }
-  function UnknownFieldException(message) {
-    SerializationException_init_$Init$(message, this);
-    captureStack(this, UnknownFieldException);
-  }
-  UnknownFieldException.$metadata$ = {
-    simpleName: 'UnknownFieldException',
-    kind: 'class',
-    interfaces: []
-  };
   function SerializationException_init_$Init$(message, $this) {
     IllegalArgumentException_init_$Init$(message, $this);
     SerializationException.call($this);
@@ -17964,6 +17977,24 @@ exports.debug = debug; // for test
   }
   SerializationException.$metadata$ = {
     simpleName: 'SerializationException',
+    kind: 'class',
+    interfaces: []
+  };
+  function UnknownFieldException_init_$Init$(index, $this) {
+    UnknownFieldException.call($this, 'An unknown field for index ' + index);
+    return $this;
+  }
+  function UnknownFieldException_init_$Create$(index) {
+    var tmp = UnknownFieldException_init_$Init$(index, Object.create(UnknownFieldException.prototype));
+    captureStack(tmp, UnknownFieldException_init_$Create$);
+    return tmp;
+  }
+  function UnknownFieldException(message) {
+    SerializationException_init_$Init$(message, this);
+    captureStack(this, UnknownFieldException);
+  }
+  UnknownFieldException.$metadata$ = {
+    simpleName: 'UnknownFieldException',
     kind: 'class',
     interfaces: []
   };
@@ -19195,90 +19226,77 @@ exports.debug = debug; // for test
   }
   AbstractPolymorphicSerializer.prototype.deserialize_2t41fm_k$ = function (decoder) {
     var tmp$ret$5;
-    $l$block_4: {
+    $l$block_5: {
       var tmp0_decodeStructure_0 = this._get_descriptor__684124924_bbb664_k$();
       var composite_1 = decoder.beginStructure_dv3yt3_k$(tmp0_decodeStructure_0);
-      var ex_2 = null;
-      try {
-        var tmp$ret$4;
-        $l$block_3: {
-          var klassName_5 = null;
-          var value_6 = null;
-          if (composite_1.decodeSequentially_xlblqy_k$()) {
-            return decodeSequentially_0(this, composite_1);
-          }
-          mainLoop: while (true) {
-            var index_7 = composite_1.decodeElementIndex_nk5a2l_k$(this._get_descriptor__684124924_bbb664_k$());
-            if (index_7 === Companion_getInstance_1()._get_DECODE_DONE__3215019198_huz1aa_k$()) {
-              break mainLoop;
-            } else if (index_7 === 0) {
-              klassName_5 = composite_1.decodeStringElement_4is7ib_k$(this._get_descriptor__684124924_bbb664_k$(), index_7);
-            } else if (index_7 === 1) {
-              var tmp$ret$1;
-              $l$block_0: {
-                var tmp0_requireNotNull_0_8 = klassName_5;
-                {
-                }
-                if (tmp0_requireNotNull_0_8 == null) {
-                  var tmp$ret$0;
-                  $l$block: {
-                    tmp$ret$0 = 'Cannot read polymorphic value before its type token';
-                    break $l$block;
-                  }
-                  var message_1_9 = tmp$ret$0;
-                  throw IllegalArgumentException_init_$Create$(toString(message_1_9));
-                } else {
-                  tmp$ret$1 = tmp0_requireNotNull_0_8;
+      var tmp$ret$0;
+      $l$block_4: {
+        var klassName_4 = null;
+        var value_5 = null;
+        if (composite_1.decodeSequentially_xlblqy_k$()) {
+          tmp$ret$0 = decodeSequentially_0(this, composite_1);
+          break $l$block_4;
+        }
+        mainLoop: while (true) {
+          var index_6 = composite_1.decodeElementIndex_nk5a2l_k$(this._get_descriptor__684124924_bbb664_k$());
+          if (index_6 === Companion_getInstance_1()._get_DECODE_DONE__3215019198_huz1aa_k$()) {
+            break mainLoop;
+          } else if (index_6 === 0) {
+            klassName_4 = composite_1.decodeStringElement_4is7ib_k$(this._get_descriptor__684124924_bbb664_k$(), index_6);
+          } else if (index_6 === 1) {
+            var tmp$ret$2;
+            $l$block_1: {
+              var tmp0_requireNotNull_0_7 = klassName_4;
+              {
+              }
+              if (tmp0_requireNotNull_0_7 == null) {
+                var tmp$ret$1;
+                $l$block_0: {
+                  tmp$ret$1 = 'Cannot read polymorphic value before its type token';
                   break $l$block_0;
                 }
-              }
-              klassName_5 = tmp$ret$1;
-              var serializer_10 = findPolymorphicSerializer(this, composite_1, klassName_5);
-              var tmp = this._get_descriptor__684124924_bbb664_k$();
-              value_6 = composite_1.decodeSerializableElement$default_xyql7s_k$(tmp, index_7, serializer_10, null, 8, null);
-            } else {
-              var tmp0_elvis_lhs_11 = klassName_5;
-              throw SerializationException_init_$Create$('Invalid index in polymorphic deserialization of ' + (tmp0_elvis_lhs_11 == null ? 'unknown class' : tmp0_elvis_lhs_11) + ('\n Expected 0, 1 or DECODE_DONE(-1), but found ' + index_7));
-            }
-          }
-          var tmp$ret$3;
-          $l$block_2: {
-            var tmp1_requireNotNull_0_12 = value_6;
-            {
-            }
-            if (tmp1_requireNotNull_0_12 == null) {
-              var tmp$ret$2;
-              $l$block_1: {
-                tmp$ret$2 = 'Polymorphic value has not been read for class ' + klassName_5;
+                var message_1_8 = tmp$ret$1;
+                throw IllegalArgumentException_init_$Create$(toString(message_1_8));
+              } else {
+                tmp$ret$2 = tmp0_requireNotNull_0_7;
                 break $l$block_1;
               }
-              var message_1_13 = tmp$ret$2;
-              throw IllegalArgumentException_init_$Create$(toString(message_1_13));
-            } else {
-              tmp$ret$3 = tmp1_requireNotNull_0_12;
+            }
+            klassName_4 = tmp$ret$2;
+            var serializer_9 = findPolymorphicSerializer(this, composite_1, klassName_4);
+            var tmp = this._get_descriptor__684124924_bbb664_k$();
+            value_5 = composite_1.decodeSerializableElement$default_xyql7s_k$(tmp, index_6, serializer_9, null, 8, null);
+          } else {
+            var tmp0_elvis_lhs_10 = klassName_4;
+            throw SerializationException_init_$Create$('Invalid index in polymorphic deserialization of ' + (tmp0_elvis_lhs_10 == null ? 'unknown class' : tmp0_elvis_lhs_10) + ('\n Expected 0, 1 or DECODE_DONE(-1), but found ' + index_6));
+          }
+        }
+        var tmp$ret$4;
+        $l$block_3: {
+          var tmp1_requireNotNull_0_11 = value_5;
+          {
+          }
+          if (tmp1_requireNotNull_0_11 == null) {
+            var tmp$ret$3;
+            $l$block_2: {
+              tmp$ret$3 = 'Polymorphic value has not been read for class ' + klassName_4;
               break $l$block_2;
             }
+            var message_1_12 = tmp$ret$3;
+            throw IllegalArgumentException_init_$Create$(toString(message_1_12));
+          } else {
+            tmp$ret$4 = tmp1_requireNotNull_0_11;
+            break $l$block_3;
           }
-          var tmp_0 = tmp$ret$3;
-          tmp$ret$4 = isObject(tmp_0) ? tmp_0 : THROW_CCE();
-          break $l$block_3;
         }
-        tmp$ret$5 = tmp$ret$4;
+        var tmp_0 = tmp$ret$4;
+        tmp$ret$0 = isObject(tmp_0) ? tmp_0 : THROW_CCE();
         break $l$block_4;
-      } catch ($p) {
-        if ($p instanceof Error) {
-          ex_2 = $p;
-          throw $p;
-        } else {
-          {
-            throw $p;
-          }
-        }
       }
-      finally {
-        if (ex_2 == null)
-          composite_1.endStructure_e64gd4_k$(tmp0_decodeStructure_0);
-      }
+      var result_2 = tmp$ret$0;
+      composite_1.endStructure_e64gd4_k$(tmp0_decodeStructure_0);
+      tmp$ret$5 = result_2;
+      break $l$block_5;
     }
     return tmp$ret$5;
   };
@@ -19310,6 +19328,33 @@ exports.debug = debug; // for test
   };
   PrimitiveArrayDescriptor.$metadata$ = {
     simpleName: 'PrimitiveArrayDescriptor',
+    kind: 'class',
+    interfaces: []
+  };
+  function ArrayClassDesc(elementDesc) {
+    ListLikeDescriptor.call(this, elementDesc);
+  }
+  ArrayClassDesc.prototype._get_serialName__1025298892_gyfpos_k$ = function () {
+    return 'kotlin.Array';
+  };
+  ArrayClassDesc.$metadata$ = {
+    simpleName: 'ArrayClassDesc',
+    kind: 'class',
+    interfaces: []
+  };
+  function LinkedHashMapClassDesc(keyDesc, valueDesc) {
+    MapLikeDescriptor.call(this, 'kotlin.collections.LinkedHashMap', keyDesc, valueDesc);
+  }
+  LinkedHashMapClassDesc.$metadata$ = {
+    simpleName: 'LinkedHashMapClassDesc',
+    kind: 'class',
+    interfaces: []
+  };
+  function HashMapClassDesc(keyDesc, valueDesc) {
+    MapLikeDescriptor.call(this, 'kotlin.collections.HashMap', keyDesc, valueDesc);
+  }
+  HashMapClassDesc.$metadata$ = {
+    simpleName: 'HashMapClassDesc',
     kind: 'class',
     interfaces: []
   };
@@ -19408,55 +19453,6 @@ exports.debug = debug; // for test
     simpleName: 'ListLikeDescriptor',
     kind: 'class',
     interfaces: [SerialDescriptor]
-  };
-  function ArrayListClassDesc(elementDesc) {
-    ListLikeDescriptor.call(this, elementDesc);
-  }
-  ArrayListClassDesc.prototype._get_serialName__1025298892_gyfpos_k$ = function () {
-    return 'kotlin.collections.ArrayList';
-  };
-  ArrayListClassDesc.$metadata$ = {
-    simpleName: 'ArrayListClassDesc',
-    kind: 'class',
-    interfaces: []
-  };
-  function LinkedHashSetClassDesc(elementDesc) {
-    ListLikeDescriptor.call(this, elementDesc);
-  }
-  LinkedHashSetClassDesc.prototype._get_serialName__1025298892_gyfpos_k$ = function () {
-    return 'kotlin.collections.LinkedHashSet';
-  };
-  LinkedHashSetClassDesc.$metadata$ = {
-    simpleName: 'LinkedHashSetClassDesc',
-    kind: 'class',
-    interfaces: []
-  };
-  function HashSetClassDesc(elementDesc) {
-    ListLikeDescriptor.call(this, elementDesc);
-  }
-  HashSetClassDesc.prototype._get_serialName__1025298892_gyfpos_k$ = function () {
-    return 'kotlin.collections.HashSet';
-  };
-  HashSetClassDesc.$metadata$ = {
-    simpleName: 'HashSetClassDesc',
-    kind: 'class',
-    interfaces: []
-  };
-  function HashMapClassDesc(keyDesc, valueDesc) {
-    MapLikeDescriptor.call(this, 'kotlin.collections.HashMap', keyDesc, valueDesc);
-  }
-  HashMapClassDesc.$metadata$ = {
-    simpleName: 'HashMapClassDesc',
-    kind: 'class',
-    interfaces: []
-  };
-  function LinkedHashMapClassDesc(keyDesc, valueDesc) {
-    MapLikeDescriptor.call(this, 'kotlin.collections.LinkedHashMap', keyDesc, valueDesc);
-  }
-  LinkedHashMapClassDesc.$metadata$ = {
-    simpleName: 'LinkedHashMapClassDesc',
-    kind: 'class',
-    interfaces: []
   };
   function MapLikeDescriptor(serialName, keyDescriptor, valueDescriptor) {
     this.serialName_1 = serialName;
@@ -19578,19 +19574,41 @@ exports.debug = debug; // for test
     kind: 'class',
     interfaces: [SerialDescriptor]
   };
-  function ArrayClassDesc(elementDesc) {
+  function ArrayListClassDesc(elementDesc) {
     ListLikeDescriptor.call(this, elementDesc);
   }
-  ArrayClassDesc.prototype._get_serialName__1025298892_gyfpos_k$ = function () {
-    return 'kotlin.Array';
+  ArrayListClassDesc.prototype._get_serialName__1025298892_gyfpos_k$ = function () {
+    return 'kotlin.collections.ArrayList';
   };
-  ArrayClassDesc.$metadata$ = {
-    simpleName: 'ArrayClassDesc',
+  ArrayListClassDesc.$metadata$ = {
+    simpleName: 'ArrayListClassDesc',
+    kind: 'class',
+    interfaces: []
+  };
+  function LinkedHashSetClassDesc(elementDesc) {
+    ListLikeDescriptor.call(this, elementDesc);
+  }
+  LinkedHashSetClassDesc.prototype._get_serialName__1025298892_gyfpos_k$ = function () {
+    return 'kotlin.collections.LinkedHashSet';
+  };
+  LinkedHashSetClassDesc.$metadata$ = {
+    simpleName: 'LinkedHashSetClassDesc',
+    kind: 'class',
+    interfaces: []
+  };
+  function HashSetClassDesc(elementDesc) {
+    ListLikeDescriptor.call(this, elementDesc);
+  }
+  HashSetClassDesc.prototype._get_serialName__1025298892_gyfpos_k$ = function () {
+    return 'kotlin.collections.HashSet';
+  };
+  HashSetClassDesc.$metadata$ = {
+    simpleName: 'HashSetClassDesc',
     kind: 'class',
     interfaces: []
   };
   function PrimitiveArraySerializer(primitiveSerializer) {
-    ListLikeSerializer.call(this, primitiveSerializer);
+    CollectionLikeSerializer.call(this, primitiveSerializer);
     this.descriptor_1 = new PrimitiveArrayDescriptor(primitiveSerializer._get_descriptor__684124924_bbb664_k$());
   }
   PrimitiveArraySerializer.prototype._get_descriptor__684124924_bbb664_k$ = function () {
@@ -19631,11 +19649,11 @@ exports.debug = debug; // for test
     kind: 'class',
     interfaces: []
   };
-  function ListLikeSerializer(elementSerializer) {
+  function CollectionLikeSerializer(elementSerializer) {
     AbstractCollectionSerializer.call(this);
     this.elementSerializer_1 = elementSerializer;
   }
-  ListLikeSerializer.prototype.readAll_s7t1kq_k$ = function (decoder, builder, startIndex, size) {
+  CollectionLikeSerializer.prototype.readAll_s7t1kq_k$ = function (decoder, builder, startIndex, size) {
     {
       var tmp0_require_0 = size >= 0;
       {
@@ -19659,12 +19677,12 @@ exports.debug = debug; // for test
       }
        while (inductionVariable < size);
   };
-  ListLikeSerializer.prototype.readElement_yuufx2_k$ = function (decoder, index, builder, checkIndex) {
+  CollectionLikeSerializer.prototype.readElement_yuufx2_k$ = function (decoder, index, builder, checkIndex) {
     var tmp = this._get_descriptor__684124924_bbb664_k$();
     this.insert_64qdau_k$(builder, index, decoder.decodeSerializableElement$default_xyql7s_k$(tmp, index, this.elementSerializer_1, null, 8, null));
   };
-  ListLikeSerializer.$metadata$ = {
-    simpleName: 'ListLikeSerializer',
+  CollectionLikeSerializer.$metadata$ = {
+    simpleName: 'CollectionLikeSerializer',
     kind: 'class',
     interfaces: []
   };
@@ -19708,14 +19726,15 @@ exports.debug = debug; // for test
     kind: 'class',
     interfaces: [KSerializer]
   };
-  function ArrayListSerializer(element) {
-    ListLikeSerializer.call(this, element);
-    this.descriptor_1 = new ArrayListClassDesc(element._get_descriptor__684124924_bbb664_k$());
+  function ReferenceArraySerializer(kClass, eSerializer) {
+    CollectionLikeSerializer.call(this, eSerializer);
+    this.kClass_1 = kClass;
+    this.descriptor_1 = new ArrayClassDesc(eSerializer._get_descriptor__684124924_bbb664_k$());
   }
-  ArrayListSerializer.prototype._get_descriptor__684124924_bbb664_k$ = function () {
+  ReferenceArraySerializer.prototype._get_descriptor__684124924_bbb664_k$ = function () {
     return this.descriptor_1;
   };
-  ArrayListSerializer.prototype.builder_3thy1n_k$ = function () {
+  ReferenceArraySerializer.prototype.builder_3thy1n_k$ = function () {
     var tmp$ret$0;
     $l$block: {
       tmp$ret$0 = ArrayList_init_$Create$_0();
@@ -19723,217 +19742,47 @@ exports.debug = debug; // for test
     }
     return tmp$ret$0;
   };
-  ArrayListSerializer.prototype.builderSize_pted1r_k$ = function (_this__1828080292) {
+  ReferenceArraySerializer.prototype.builderSize_q7iht4_k$ = function (_this__1828080292) {
     return _this__1828080292._get_size__809037418_ddoh9m_k$();
   };
-  ArrayListSerializer.prototype.builderSize_mmbugq_k$ = function (_this__1828080292) {
-    return this.builderSize_pted1r_k$(_this__1828080292 instanceof ArrayList ? _this__1828080292 : THROW_CCE());
+  ReferenceArraySerializer.prototype.builderSize_mmbugq_k$ = function (_this__1828080292) {
+    return this.builderSize_q7iht4_k$(_this__1828080292 instanceof ArrayList ? _this__1828080292 : THROW_CCE());
   };
-  ArrayListSerializer.prototype.toResult_t33s23_k$ = function (_this__1828080292) {
-    return _this__1828080292;
+  ReferenceArraySerializer.prototype.toResult_l9vbl8_k$ = function (_this__1828080292) {
+    return toNativeArrayImpl(_this__1828080292, this.kClass_1);
   };
-  ArrayListSerializer.prototype.toResult_nzwaf2_k$ = function (_this__1828080292) {
-    return this.toResult_t33s23_k$(_this__1828080292 instanceof ArrayList ? _this__1828080292 : THROW_CCE());
+  ReferenceArraySerializer.prototype.toResult_nzwaf2_k$ = function (_this__1828080292) {
+    return this.toResult_l9vbl8_k$(_this__1828080292 instanceof ArrayList ? _this__1828080292 : THROW_CCE());
   };
-  ArrayListSerializer.prototype.toBuilder_9sdg76_k$ = function (_this__1828080292) {
-    var tmp0_elvis_lhs = _this__1828080292 instanceof ArrayList ? _this__1828080292 : null;
-    return tmp0_elvis_lhs == null ? ArrayList_init_$Create$_1(_this__1828080292) : tmp0_elvis_lhs;
+  ReferenceArraySerializer.prototype.toBuilder_qnyl35_k$ = function (_this__1828080292) {
+    return ArrayList_init_$Create$_1(asList(_this__1828080292));
   };
-  ArrayListSerializer.prototype.toBuilder_9n7g5t_k$ = function (_this__1828080292) {
-    return this.toBuilder_9sdg76_k$((!(_this__1828080292 == null) ? isInterface(_this__1828080292, List) : false) ? _this__1828080292 : THROW_CCE());
+  ReferenceArraySerializer.prototype.toBuilder_9n7g5t_k$ = function (_this__1828080292) {
+    return this.toBuilder_qnyl35_k$((!(_this__1828080292 == null) ? isArray(_this__1828080292) : false) ? _this__1828080292 : THROW_CCE());
   };
-  ArrayListSerializer.prototype.checkCapacity_ao7vf_k$ = function (_this__1828080292, size) {
+  ReferenceArraySerializer.prototype.checkCapacity_3yirqq_k$ = function (_this__1828080292, size) {
     return _this__1828080292.ensureCapacity_ignus8_k$(size);
   };
-  ArrayListSerializer.prototype.checkCapacity_ge5iis_k$ = function (_this__1828080292, size) {
-    return this.checkCapacity_ao7vf_k$(_this__1828080292 instanceof ArrayList ? _this__1828080292 : THROW_CCE(), size);
+  ReferenceArraySerializer.prototype.checkCapacity_ge5iis_k$ = function (_this__1828080292, size) {
+    return this.checkCapacity_3yirqq_k$(_this__1828080292 instanceof ArrayList ? _this__1828080292 : THROW_CCE(), size);
   };
-  ArrayListSerializer.prototype.insert_fxdj4m_k$ = function (_this__1828080292, index, element) {
+  ReferenceArraySerializer.prototype.insert_5tew8_k$ = function (_this__1828080292, index, element) {
     _this__1828080292.add_ydlf05_k$(index, element);
   };
-  ArrayListSerializer.prototype.insert_64qdau_k$ = function (_this__1828080292, index, element) {
+  ReferenceArraySerializer.prototype.insert_64qdau_k$ = function (_this__1828080292, index, element) {
     var tmp = _this__1828080292 instanceof ArrayList ? _this__1828080292 : THROW_CCE();
-    return this.insert_fxdj4m_k$(tmp, index, (element == null ? true : isObject(element)) ? element : THROW_CCE());
+    return this.insert_5tew8_k$(tmp, index, (element == null ? true : isObject(element)) ? element : THROW_CCE());
   };
-  ArrayListSerializer.$metadata$ = {
-    simpleName: 'ArrayListSerializer',
+  ReferenceArraySerializer.$metadata$ = {
+    simpleName: 'ReferenceArraySerializer',
     kind: 'class',
     interfaces: []
   };
-  function LinkedHashSetSerializer(eSerializer) {
-    ListLikeSerializer.call(this, eSerializer);
-    this.descriptor_1 = new LinkedHashSetClassDesc(eSerializer._get_descriptor__684124924_bbb664_k$());
+  function CollectionSerializer(element) {
+    CollectionLikeSerializer.call(this, element);
   }
-  LinkedHashSetSerializer.prototype._get_descriptor__684124924_bbb664_k$ = function () {
-    return this.descriptor_1;
-  };
-  LinkedHashSetSerializer.prototype.builder_3thy1n_k$ = function () {
-    var tmp$ret$0;
-    $l$block: {
-      tmp$ret$0 = LinkedHashSet_init_$Create$();
-      break $l$block;
-    }
-    return tmp$ret$0;
-  };
-  LinkedHashSetSerializer.prototype.builderSize_c7xn2j_k$ = function (_this__1828080292) {
-    return _this__1828080292._get_size__809037418_ddoh9m_k$();
-  };
-  LinkedHashSetSerializer.prototype.builderSize_mmbugq_k$ = function (_this__1828080292) {
-    return this.builderSize_c7xn2j_k$(_this__1828080292 instanceof LinkedHashSet ? _this__1828080292 : THROW_CCE());
-  };
-  LinkedHashSetSerializer.prototype.toResult_rgrz5l_k$ = function (_this__1828080292) {
-    return _this__1828080292;
-  };
-  LinkedHashSetSerializer.prototype.toResult_nzwaf2_k$ = function (_this__1828080292) {
-    return this.toResult_rgrz5l_k$(_this__1828080292 instanceof LinkedHashSet ? _this__1828080292 : THROW_CCE());
-  };
-  LinkedHashSetSerializer.prototype.toBuilder_lmw6bc_k$ = function (_this__1828080292) {
-    var tmp0_elvis_lhs = _this__1828080292 instanceof LinkedHashSet ? _this__1828080292 : null;
-    return tmp0_elvis_lhs == null ? LinkedHashSet_init_$Create$_0(_this__1828080292) : tmp0_elvis_lhs;
-  };
-  LinkedHashSetSerializer.prototype.toBuilder_9n7g5t_k$ = function (_this__1828080292) {
-    return this.toBuilder_lmw6bc_k$((!(_this__1828080292 == null) ? isInterface(_this__1828080292, Set) : false) ? _this__1828080292 : THROW_CCE());
-  };
-  LinkedHashSetSerializer.prototype.checkCapacity_qs5vdt_k$ = function (_this__1828080292, size) {
-  };
-  LinkedHashSetSerializer.prototype.checkCapacity_ge5iis_k$ = function (_this__1828080292, size) {
-    return this.checkCapacity_qs5vdt_k$(_this__1828080292 instanceof LinkedHashSet ? _this__1828080292 : THROW_CCE(), size);
-  };
-  LinkedHashSetSerializer.prototype.insert_3b5fv6_k$ = function (_this__1828080292, index, element) {
-    _this__1828080292.add_1j60pz_k$(element);
-    Unit_getInstance();
-  };
-  LinkedHashSetSerializer.prototype.insert_64qdau_k$ = function (_this__1828080292, index, element) {
-    var tmp = _this__1828080292 instanceof LinkedHashSet ? _this__1828080292 : THROW_CCE();
-    return this.insert_3b5fv6_k$(tmp, index, (element == null ? true : isObject(element)) ? element : THROW_CCE());
-  };
-  LinkedHashSetSerializer.$metadata$ = {
-    simpleName: 'LinkedHashSetSerializer',
-    kind: 'class',
-    interfaces: []
-  };
-  function HashSetSerializer(eSerializer) {
-    ListLikeSerializer.call(this, eSerializer);
-    this.descriptor_1 = new HashSetClassDesc(eSerializer._get_descriptor__684124924_bbb664_k$());
-  }
-  HashSetSerializer.prototype._get_descriptor__684124924_bbb664_k$ = function () {
-    return this.descriptor_1;
-  };
-  HashSetSerializer.prototype.builder_3thy1n_k$ = function () {
-    return HashSet_init_$Create$();
-  };
-  HashSetSerializer.prototype.builderSize_9hxhhu_k$ = function (_this__1828080292) {
-    return _this__1828080292._get_size__809037418_ddoh9m_k$();
-  };
-  HashSetSerializer.prototype.builderSize_mmbugq_k$ = function (_this__1828080292) {
-    return this.builderSize_9hxhhu_k$(_this__1828080292 instanceof HashSet ? _this__1828080292 : THROW_CCE());
-  };
-  HashSetSerializer.prototype.toResult_bsa6lu_k$ = function (_this__1828080292) {
-    return _this__1828080292;
-  };
-  HashSetSerializer.prototype.toResult_nzwaf2_k$ = function (_this__1828080292) {
-    return this.toResult_bsa6lu_k$(_this__1828080292 instanceof HashSet ? _this__1828080292 : THROW_CCE());
-  };
-  HashSetSerializer.prototype.toBuilder_lmw6bc_k$ = function (_this__1828080292) {
-    var tmp0_elvis_lhs = _this__1828080292 instanceof HashSet ? _this__1828080292 : null;
-    return tmp0_elvis_lhs == null ? HashSet_init_$Create$_0(_this__1828080292) : tmp0_elvis_lhs;
-  };
-  HashSetSerializer.prototype.toBuilder_9n7g5t_k$ = function (_this__1828080292) {
-    return this.toBuilder_lmw6bc_k$((!(_this__1828080292 == null) ? isInterface(_this__1828080292, Set) : false) ? _this__1828080292 : THROW_CCE());
-  };
-  HashSetSerializer.prototype.checkCapacity_bde2fc_k$ = function (_this__1828080292, size) {
-  };
-  HashSetSerializer.prototype.checkCapacity_ge5iis_k$ = function (_this__1828080292, size) {
-    return this.checkCapacity_bde2fc_k$(_this__1828080292 instanceof HashSet ? _this__1828080292 : THROW_CCE(), size);
-  };
-  HashSetSerializer.prototype.insert_66pcc9_k$ = function (_this__1828080292, index, element) {
-    _this__1828080292.add_1j60pz_k$(element);
-    Unit_getInstance();
-  };
-  HashSetSerializer.prototype.insert_64qdau_k$ = function (_this__1828080292, index, element) {
-    var tmp = _this__1828080292 instanceof HashSet ? _this__1828080292 : THROW_CCE();
-    return this.insert_66pcc9_k$(tmp, index, (element == null ? true : isObject(element)) ? element : THROW_CCE());
-  };
-  HashSetSerializer.$metadata$ = {
-    simpleName: 'HashSetSerializer',
-    kind: 'class',
-    interfaces: []
-  };
-  function HashMapSerializer(kSerializer, vSerializer) {
-    MapLikeSerializer.call(this, kSerializer, vSerializer);
-    this.descriptor_1 = new HashMapClassDesc(kSerializer._get_descriptor__684124924_bbb664_k$(), vSerializer._get_descriptor__684124924_bbb664_k$());
-  }
-  HashMapSerializer.prototype._get_descriptor__684124924_bbb664_k$ = function () {
-    return this.descriptor_1;
-  };
-  HashMapSerializer.prototype.builder_3thy1n_k$ = function () {
-    return HashMap_init_$Create$();
-  };
-  HashMapSerializer.prototype.builderSize_f8e7zc_k$ = function (_this__1828080292) {
-    return imul(_this__1828080292._get_size__809037418_ddoh9m_k$(), 2);
-  };
-  HashMapSerializer.prototype.builderSize_mmbugq_k$ = function (_this__1828080292) {
-    return this.builderSize_f8e7zc_k$(_this__1828080292 instanceof HashMap ? _this__1828080292 : THROW_CCE());
-  };
-  HashMapSerializer.prototype.toResult_ii3mzo_k$ = function (_this__1828080292) {
-    return _this__1828080292;
-  };
-  HashMapSerializer.prototype.toResult_nzwaf2_k$ = function (_this__1828080292) {
-    return this.toResult_ii3mzo_k$(_this__1828080292 instanceof HashMap ? _this__1828080292 : THROW_CCE());
-  };
-  HashMapSerializer.prototype.toBuilder_iza02_k$ = function (_this__1828080292) {
-    var tmp0_elvis_lhs = _this__1828080292 instanceof HashMap ? _this__1828080292 : null;
-    return tmp0_elvis_lhs == null ? HashMap_init_$Create$_0(_this__1828080292) : tmp0_elvis_lhs;
-  };
-  HashMapSerializer.prototype.toBuilder_9n7g5t_k$ = function (_this__1828080292) {
-    return this.toBuilder_iza02_k$((!(_this__1828080292 == null) ? isInterface(_this__1828080292, Map) : false) ? _this__1828080292 : THROW_CCE());
-  };
-  HashMapSerializer.prototype.checkCapacity_bomj8i_k$ = function (_this__1828080292, size) {
-  };
-  HashMapSerializer.prototype.checkCapacity_ge5iis_k$ = function (_this__1828080292, size) {
-    return this.checkCapacity_bomj8i_k$(_this__1828080292 instanceof HashMap ? _this__1828080292 : THROW_CCE(), size);
-  };
-  HashMapSerializer.$metadata$ = {
-    simpleName: 'HashMapSerializer',
-    kind: 'class',
-    interfaces: []
-  };
-  function LinkedHashMapSerializer(kSerializer, vSerializer) {
-    MapLikeSerializer.call(this, kSerializer, vSerializer);
-    this.descriptor_1 = new LinkedHashMapClassDesc(kSerializer._get_descriptor__684124924_bbb664_k$(), vSerializer._get_descriptor__684124924_bbb664_k$());
-  }
-  LinkedHashMapSerializer.prototype._get_descriptor__684124924_bbb664_k$ = function () {
-    return this.descriptor_1;
-  };
-  LinkedHashMapSerializer.prototype.builder_3thy1n_k$ = function () {
-    return LinkedHashMap_init_$Create$();
-  };
-  LinkedHashMapSerializer.prototype.builderSize_39d0bl_k$ = function (_this__1828080292) {
-    return imul(_this__1828080292._get_size__809037418_ddoh9m_k$(), 2);
-  };
-  LinkedHashMapSerializer.prototype.builderSize_mmbugq_k$ = function (_this__1828080292) {
-    return this.builderSize_39d0bl_k$(_this__1828080292 instanceof LinkedHashMap ? _this__1828080292 : THROW_CCE());
-  };
-  LinkedHashMapSerializer.prototype.toResult_8706jh_k$ = function (_this__1828080292) {
-    return _this__1828080292;
-  };
-  LinkedHashMapSerializer.prototype.toResult_nzwaf2_k$ = function (_this__1828080292) {
-    return this.toResult_8706jh_k$(_this__1828080292 instanceof LinkedHashMap ? _this__1828080292 : THROW_CCE());
-  };
-  LinkedHashMapSerializer.prototype.toBuilder_iza02_k$ = function (_this__1828080292) {
-    var tmp0_elvis_lhs = _this__1828080292 instanceof LinkedHashMap ? _this__1828080292 : null;
-    return tmp0_elvis_lhs == null ? LinkedHashMap_init_$Create$_0(_this__1828080292) : tmp0_elvis_lhs;
-  };
-  LinkedHashMapSerializer.prototype.toBuilder_9n7g5t_k$ = function (_this__1828080292) {
-    return this.toBuilder_iza02_k$((!(_this__1828080292 == null) ? isInterface(_this__1828080292, Map) : false) ? _this__1828080292 : THROW_CCE());
-  };
-  LinkedHashMapSerializer.prototype.checkCapacity_n86247_k$ = function (_this__1828080292, size) {
-  };
-  LinkedHashMapSerializer.prototype.checkCapacity_ge5iis_k$ = function (_this__1828080292, size) {
-    return this.checkCapacity_n86247_k$(_this__1828080292 instanceof LinkedHashMap ? _this__1828080292 : THROW_CCE(), size);
-  };
-  LinkedHashMapSerializer.$metadata$ = {
-    simpleName: 'LinkedHashMapSerializer',
+  CollectionSerializer.$metadata$ = {
+    simpleName: 'CollectionSerializer',
     kind: 'class',
     interfaces: []
   };
@@ -20030,15 +19879,92 @@ exports.debug = debug; // for test
     kind: 'class',
     interfaces: []
   };
-  function ReferenceArraySerializer(kClass, eSerializer) {
-    ListLikeSerializer.call(this, eSerializer);
-    this.kClass_1 = kClass;
-    this.descriptor_1 = new ArrayClassDesc(eSerializer._get_descriptor__684124924_bbb664_k$());
+  function LinkedHashMapSerializer(kSerializer, vSerializer) {
+    MapLikeSerializer.call(this, kSerializer, vSerializer);
+    this.descriptor_1 = new LinkedHashMapClassDesc(kSerializer._get_descriptor__684124924_bbb664_k$(), vSerializer._get_descriptor__684124924_bbb664_k$());
   }
-  ReferenceArraySerializer.prototype._get_descriptor__684124924_bbb664_k$ = function () {
+  LinkedHashMapSerializer.prototype._get_descriptor__684124924_bbb664_k$ = function () {
     return this.descriptor_1;
   };
-  ReferenceArraySerializer.prototype.builder_3thy1n_k$ = function () {
+  LinkedHashMapSerializer.prototype.builder_3thy1n_k$ = function () {
+    return LinkedHashMap_init_$Create$();
+  };
+  LinkedHashMapSerializer.prototype.builderSize_39d0bl_k$ = function (_this__1828080292) {
+    return imul(_this__1828080292._get_size__809037418_ddoh9m_k$(), 2);
+  };
+  LinkedHashMapSerializer.prototype.builderSize_mmbugq_k$ = function (_this__1828080292) {
+    return this.builderSize_39d0bl_k$(_this__1828080292 instanceof LinkedHashMap ? _this__1828080292 : THROW_CCE());
+  };
+  LinkedHashMapSerializer.prototype.toResult_8706jh_k$ = function (_this__1828080292) {
+    return _this__1828080292;
+  };
+  LinkedHashMapSerializer.prototype.toResult_nzwaf2_k$ = function (_this__1828080292) {
+    return this.toResult_8706jh_k$(_this__1828080292 instanceof LinkedHashMap ? _this__1828080292 : THROW_CCE());
+  };
+  LinkedHashMapSerializer.prototype.toBuilder_iza02_k$ = function (_this__1828080292) {
+    var tmp0_elvis_lhs = _this__1828080292 instanceof LinkedHashMap ? _this__1828080292 : null;
+    return tmp0_elvis_lhs == null ? LinkedHashMap_init_$Create$_0(_this__1828080292) : tmp0_elvis_lhs;
+  };
+  LinkedHashMapSerializer.prototype.toBuilder_9n7g5t_k$ = function (_this__1828080292) {
+    return this.toBuilder_iza02_k$((!(_this__1828080292 == null) ? isInterface(_this__1828080292, Map) : false) ? _this__1828080292 : THROW_CCE());
+  };
+  LinkedHashMapSerializer.prototype.checkCapacity_n86247_k$ = function (_this__1828080292, size) {
+  };
+  LinkedHashMapSerializer.prototype.checkCapacity_ge5iis_k$ = function (_this__1828080292, size) {
+    return this.checkCapacity_n86247_k$(_this__1828080292 instanceof LinkedHashMap ? _this__1828080292 : THROW_CCE(), size);
+  };
+  LinkedHashMapSerializer.$metadata$ = {
+    simpleName: 'LinkedHashMapSerializer',
+    kind: 'class',
+    interfaces: []
+  };
+  function HashMapSerializer(kSerializer, vSerializer) {
+    MapLikeSerializer.call(this, kSerializer, vSerializer);
+    this.descriptor_1 = new HashMapClassDesc(kSerializer._get_descriptor__684124924_bbb664_k$(), vSerializer._get_descriptor__684124924_bbb664_k$());
+  }
+  HashMapSerializer.prototype._get_descriptor__684124924_bbb664_k$ = function () {
+    return this.descriptor_1;
+  };
+  HashMapSerializer.prototype.builder_3thy1n_k$ = function () {
+    return HashMap_init_$Create$();
+  };
+  HashMapSerializer.prototype.builderSize_f8e7zc_k$ = function (_this__1828080292) {
+    return imul(_this__1828080292._get_size__809037418_ddoh9m_k$(), 2);
+  };
+  HashMapSerializer.prototype.builderSize_mmbugq_k$ = function (_this__1828080292) {
+    return this.builderSize_f8e7zc_k$(_this__1828080292 instanceof HashMap ? _this__1828080292 : THROW_CCE());
+  };
+  HashMapSerializer.prototype.toResult_ii3mzo_k$ = function (_this__1828080292) {
+    return _this__1828080292;
+  };
+  HashMapSerializer.prototype.toResult_nzwaf2_k$ = function (_this__1828080292) {
+    return this.toResult_ii3mzo_k$(_this__1828080292 instanceof HashMap ? _this__1828080292 : THROW_CCE());
+  };
+  HashMapSerializer.prototype.toBuilder_iza02_k$ = function (_this__1828080292) {
+    var tmp0_elvis_lhs = _this__1828080292 instanceof HashMap ? _this__1828080292 : null;
+    return tmp0_elvis_lhs == null ? HashMap_init_$Create$_0(_this__1828080292) : tmp0_elvis_lhs;
+  };
+  HashMapSerializer.prototype.toBuilder_9n7g5t_k$ = function (_this__1828080292) {
+    return this.toBuilder_iza02_k$((!(_this__1828080292 == null) ? isInterface(_this__1828080292, Map) : false) ? _this__1828080292 : THROW_CCE());
+  };
+  HashMapSerializer.prototype.checkCapacity_bomj8i_k$ = function (_this__1828080292, size) {
+  };
+  HashMapSerializer.prototype.checkCapacity_ge5iis_k$ = function (_this__1828080292, size) {
+    return this.checkCapacity_bomj8i_k$(_this__1828080292 instanceof HashMap ? _this__1828080292 : THROW_CCE(), size);
+  };
+  HashMapSerializer.$metadata$ = {
+    simpleName: 'HashMapSerializer',
+    kind: 'class',
+    interfaces: []
+  };
+  function ArrayListSerializer(element) {
+    CollectionSerializer.call(this, element);
+    this.descriptor_1 = new ArrayListClassDesc(element._get_descriptor__684124924_bbb664_k$());
+  }
+  ArrayListSerializer.prototype._get_descriptor__684124924_bbb664_k$ = function () {
+    return this.descriptor_1;
+  };
+  ArrayListSerializer.prototype.builder_3thy1n_k$ = function () {
     var tmp$ret$0;
     $l$block: {
       tmp$ret$0 = ArrayList_init_$Create$_0();
@@ -20046,39 +19972,139 @@ exports.debug = debug; // for test
     }
     return tmp$ret$0;
   };
-  ReferenceArraySerializer.prototype.builderSize_q7iht4_k$ = function (_this__1828080292) {
+  ArrayListSerializer.prototype.builderSize_pted1r_k$ = function (_this__1828080292) {
     return _this__1828080292._get_size__809037418_ddoh9m_k$();
   };
-  ReferenceArraySerializer.prototype.builderSize_mmbugq_k$ = function (_this__1828080292) {
-    return this.builderSize_q7iht4_k$(_this__1828080292 instanceof ArrayList ? _this__1828080292 : THROW_CCE());
+  ArrayListSerializer.prototype.builderSize_mmbugq_k$ = function (_this__1828080292) {
+    return this.builderSize_pted1r_k$(_this__1828080292 instanceof ArrayList ? _this__1828080292 : THROW_CCE());
   };
-  ReferenceArraySerializer.prototype.toResult_l9vbl8_k$ = function (_this__1828080292) {
-    return toNativeArrayImpl(_this__1828080292, this.kClass_1);
+  ArrayListSerializer.prototype.toResult_t33s23_k$ = function (_this__1828080292) {
+    return _this__1828080292;
   };
-  ReferenceArraySerializer.prototype.toResult_nzwaf2_k$ = function (_this__1828080292) {
-    return this.toResult_l9vbl8_k$(_this__1828080292 instanceof ArrayList ? _this__1828080292 : THROW_CCE());
+  ArrayListSerializer.prototype.toResult_nzwaf2_k$ = function (_this__1828080292) {
+    return this.toResult_t33s23_k$(_this__1828080292 instanceof ArrayList ? _this__1828080292 : THROW_CCE());
   };
-  ReferenceArraySerializer.prototype.toBuilder_qnyl35_k$ = function (_this__1828080292) {
-    return ArrayList_init_$Create$_1(asList(_this__1828080292));
+  ArrayListSerializer.prototype.toBuilder_9sdg76_k$ = function (_this__1828080292) {
+    var tmp0_elvis_lhs = _this__1828080292 instanceof ArrayList ? _this__1828080292 : null;
+    return tmp0_elvis_lhs == null ? ArrayList_init_$Create$_1(_this__1828080292) : tmp0_elvis_lhs;
   };
-  ReferenceArraySerializer.prototype.toBuilder_9n7g5t_k$ = function (_this__1828080292) {
-    return this.toBuilder_qnyl35_k$((!(_this__1828080292 == null) ? isArray(_this__1828080292) : false) ? _this__1828080292 : THROW_CCE());
+  ArrayListSerializer.prototype.toBuilder_9n7g5t_k$ = function (_this__1828080292) {
+    return this.toBuilder_9sdg76_k$((!(_this__1828080292 == null) ? isInterface(_this__1828080292, List) : false) ? _this__1828080292 : THROW_CCE());
   };
-  ReferenceArraySerializer.prototype.checkCapacity_3yirqq_k$ = function (_this__1828080292, size) {
+  ArrayListSerializer.prototype.checkCapacity_ao7vf_k$ = function (_this__1828080292, size) {
     return _this__1828080292.ensureCapacity_ignus8_k$(size);
   };
-  ReferenceArraySerializer.prototype.checkCapacity_ge5iis_k$ = function (_this__1828080292, size) {
-    return this.checkCapacity_3yirqq_k$(_this__1828080292 instanceof ArrayList ? _this__1828080292 : THROW_CCE(), size);
+  ArrayListSerializer.prototype.checkCapacity_ge5iis_k$ = function (_this__1828080292, size) {
+    return this.checkCapacity_ao7vf_k$(_this__1828080292 instanceof ArrayList ? _this__1828080292 : THROW_CCE(), size);
   };
-  ReferenceArraySerializer.prototype.insert_5tew8_k$ = function (_this__1828080292, index, element) {
+  ArrayListSerializer.prototype.insert_fxdj4m_k$ = function (_this__1828080292, index, element) {
     _this__1828080292.add_ydlf05_k$(index, element);
   };
-  ReferenceArraySerializer.prototype.insert_64qdau_k$ = function (_this__1828080292, index, element) {
+  ArrayListSerializer.prototype.insert_64qdau_k$ = function (_this__1828080292, index, element) {
     var tmp = _this__1828080292 instanceof ArrayList ? _this__1828080292 : THROW_CCE();
-    return this.insert_5tew8_k$(tmp, index, (element == null ? true : isObject(element)) ? element : THROW_CCE());
+    return this.insert_fxdj4m_k$(tmp, index, (element == null ? true : isObject(element)) ? element : THROW_CCE());
   };
-  ReferenceArraySerializer.$metadata$ = {
-    simpleName: 'ReferenceArraySerializer',
+  ArrayListSerializer.$metadata$ = {
+    simpleName: 'ArrayListSerializer',
+    kind: 'class',
+    interfaces: []
+  };
+  function LinkedHashSetSerializer(eSerializer) {
+    CollectionSerializer.call(this, eSerializer);
+    this.descriptor_1 = new LinkedHashSetClassDesc(eSerializer._get_descriptor__684124924_bbb664_k$());
+  }
+  LinkedHashSetSerializer.prototype._get_descriptor__684124924_bbb664_k$ = function () {
+    return this.descriptor_1;
+  };
+  LinkedHashSetSerializer.prototype.builder_3thy1n_k$ = function () {
+    var tmp$ret$0;
+    $l$block: {
+      tmp$ret$0 = LinkedHashSet_init_$Create$();
+      break $l$block;
+    }
+    return tmp$ret$0;
+  };
+  LinkedHashSetSerializer.prototype.builderSize_c7xn2j_k$ = function (_this__1828080292) {
+    return _this__1828080292._get_size__809037418_ddoh9m_k$();
+  };
+  LinkedHashSetSerializer.prototype.builderSize_mmbugq_k$ = function (_this__1828080292) {
+    return this.builderSize_c7xn2j_k$(_this__1828080292 instanceof LinkedHashSet ? _this__1828080292 : THROW_CCE());
+  };
+  LinkedHashSetSerializer.prototype.toResult_rgrz5l_k$ = function (_this__1828080292) {
+    return _this__1828080292;
+  };
+  LinkedHashSetSerializer.prototype.toResult_nzwaf2_k$ = function (_this__1828080292) {
+    return this.toResult_rgrz5l_k$(_this__1828080292 instanceof LinkedHashSet ? _this__1828080292 : THROW_CCE());
+  };
+  LinkedHashSetSerializer.prototype.toBuilder_lmw6bc_k$ = function (_this__1828080292) {
+    var tmp0_elvis_lhs = _this__1828080292 instanceof LinkedHashSet ? _this__1828080292 : null;
+    return tmp0_elvis_lhs == null ? LinkedHashSet_init_$Create$_0(_this__1828080292) : tmp0_elvis_lhs;
+  };
+  LinkedHashSetSerializer.prototype.toBuilder_9n7g5t_k$ = function (_this__1828080292) {
+    return this.toBuilder_lmw6bc_k$((!(_this__1828080292 == null) ? isInterface(_this__1828080292, Set) : false) ? _this__1828080292 : THROW_CCE());
+  };
+  LinkedHashSetSerializer.prototype.checkCapacity_qs5vdt_k$ = function (_this__1828080292, size) {
+  };
+  LinkedHashSetSerializer.prototype.checkCapacity_ge5iis_k$ = function (_this__1828080292, size) {
+    return this.checkCapacity_qs5vdt_k$(_this__1828080292 instanceof LinkedHashSet ? _this__1828080292 : THROW_CCE(), size);
+  };
+  LinkedHashSetSerializer.prototype.insert_3b5fv6_k$ = function (_this__1828080292, index, element) {
+    _this__1828080292.add_1j60pz_k$(element);
+    Unit_getInstance();
+  };
+  LinkedHashSetSerializer.prototype.insert_64qdau_k$ = function (_this__1828080292, index, element) {
+    var tmp = _this__1828080292 instanceof LinkedHashSet ? _this__1828080292 : THROW_CCE();
+    return this.insert_3b5fv6_k$(tmp, index, (element == null ? true : isObject(element)) ? element : THROW_CCE());
+  };
+  LinkedHashSetSerializer.$metadata$ = {
+    simpleName: 'LinkedHashSetSerializer',
+    kind: 'class',
+    interfaces: []
+  };
+  function HashSetSerializer(eSerializer) {
+    CollectionSerializer.call(this, eSerializer);
+    this.descriptor_1 = new HashSetClassDesc(eSerializer._get_descriptor__684124924_bbb664_k$());
+  }
+  HashSetSerializer.prototype._get_descriptor__684124924_bbb664_k$ = function () {
+    return this.descriptor_1;
+  };
+  HashSetSerializer.prototype.builder_3thy1n_k$ = function () {
+    return HashSet_init_$Create$();
+  };
+  HashSetSerializer.prototype.builderSize_9hxhhu_k$ = function (_this__1828080292) {
+    return _this__1828080292._get_size__809037418_ddoh9m_k$();
+  };
+  HashSetSerializer.prototype.builderSize_mmbugq_k$ = function (_this__1828080292) {
+    return this.builderSize_9hxhhu_k$(_this__1828080292 instanceof HashSet ? _this__1828080292 : THROW_CCE());
+  };
+  HashSetSerializer.prototype.toResult_bsa6lu_k$ = function (_this__1828080292) {
+    return _this__1828080292;
+  };
+  HashSetSerializer.prototype.toResult_nzwaf2_k$ = function (_this__1828080292) {
+    return this.toResult_bsa6lu_k$(_this__1828080292 instanceof HashSet ? _this__1828080292 : THROW_CCE());
+  };
+  HashSetSerializer.prototype.toBuilder_lmw6bc_k$ = function (_this__1828080292) {
+    var tmp0_elvis_lhs = _this__1828080292 instanceof HashSet ? _this__1828080292 : null;
+    return tmp0_elvis_lhs == null ? HashSet_init_$Create$_0(_this__1828080292) : tmp0_elvis_lhs;
+  };
+  HashSetSerializer.prototype.toBuilder_9n7g5t_k$ = function (_this__1828080292) {
+    return this.toBuilder_lmw6bc_k$((!(_this__1828080292 == null) ? isInterface(_this__1828080292, Set) : false) ? _this__1828080292 : THROW_CCE());
+  };
+  HashSetSerializer.prototype.checkCapacity_bde2fc_k$ = function (_this__1828080292, size) {
+  };
+  HashSetSerializer.prototype.checkCapacity_ge5iis_k$ = function (_this__1828080292, size) {
+    return this.checkCapacity_bde2fc_k$(_this__1828080292 instanceof HashSet ? _this__1828080292 : THROW_CCE(), size);
+  };
+  HashSetSerializer.prototype.insert_66pcc9_k$ = function (_this__1828080292, index, element) {
+    _this__1828080292.add_1j60pz_k$(element);
+    Unit_getInstance();
+  };
+  HashSetSerializer.prototype.insert_64qdau_k$ = function (_this__1828080292, index, element) {
+    var tmp = _this__1828080292 instanceof HashSet ? _this__1828080292 : THROW_CCE();
+    return this.insert_66pcc9_k$(tmp, index, (element == null ? true : isObject(element)) ? element : THROW_CCE());
+  };
+  HashSetSerializer.$metadata$ = {
+    simpleName: 'HashSetSerializer',
     kind: 'class',
     interfaces: []
   };
@@ -20284,6 +20310,7 @@ exports.debug = debug; // for test
   function ObjectSerializer$descriptor$delegate$lambda$lambda(this$0) {
     return function ($this$buildSerialDescriptor) {
       $this$buildSerialDescriptor._set_annotations__74516833_7ksc49_k$(this$0._annotations_1);
+      return Unit_getInstance();
     };
   }
   function ObjectSerializer$descriptor$delegate$lambda($serialName, this$0) {
@@ -20309,7 +20336,24 @@ exports.debug = debug; // for test
     return tmp$ret$0;
   };
   ObjectSerializer.prototype.deserialize_2t41fm_k$ = function (decoder) {
-    decoder.beginStructure_dv3yt3_k$(this._get_descriptor__684124924_bbb664_k$()).endStructure_e64gd4_k$(this._get_descriptor__684124924_bbb664_k$());
+    var tmp$ret$1;
+    $l$block_0: {
+      var tmp0_decodeStructure_0 = this._get_descriptor__684124924_bbb664_k$();
+      var composite_1 = decoder.beginStructure_dv3yt3_k$(tmp0_decodeStructure_0);
+      var tmp$ret$0;
+      $l$block: {
+        var index_4 = composite_1.decodeElementIndex_nk5a2l_k$(this._get_descriptor__684124924_bbb664_k$());
+        if (index_4 === Companion_getInstance_1()._get_DECODE_DONE__3215019198_huz1aa_k$()) {
+          tmp$ret$0 = Unit_getInstance();
+          break $l$block;
+        } else
+          throw SerializationException_init_$Create$('Unexpected index ' + index_4);
+      }
+      var result_2 = tmp$ret$0;
+      composite_1.endStructure_e64gd4_k$(tmp0_decodeStructure_0);
+      tmp$ret$1 = result_2;
+      break $l$block_0;
+    }
     return this.objectInstance_1;
   };
   ObjectSerializer.$metadata$ = {
@@ -20378,9 +20422,14 @@ exports.debug = debug; // for test
     if (!(t == null) ? isInterface(t, KClass) : false) {
       tmp = t;
     } else {
-      {
-        var tmp0_error_0 = 'Only KClass supported as classifier, got ' + t;
+      if (!(t == null) ? isInterface(t, KTypeParameter) : false) {
+        var tmp0_error_0 = 'Captured type paramerer ' + t + ' from generic non-reified function. ' + ('Such functionality cannot be supported as ' + t + ' is erased, either specify serializer explicitly or make ') + ('calling function inline with reified ' + t);
         throw IllegalStateException_init_$Create$(toString(tmp0_error_0));
+      } else {
+        {
+          var tmp1_error_0 = 'Only KClass supported as classifier, got ' + t;
+          throw IllegalStateException_init_$Create$(toString(tmp1_error_0));
+        }
       }
     }
     var tmp_0 = tmp;
@@ -21903,6 +21952,7 @@ exports.debug = debug; // for test
       $this$buildSerialDescriptor.element$default_m7h690_k$('key', tmp, null, false, 12, null);
       var tmp_0 = $valueSerializer._get_descriptor__684124924_bbb664_k$();
       $this$buildSerialDescriptor.element$default_m7h690_k$('value', tmp_0, null, false, 12, null);
+      return Unit_getInstance();
     };
   }
   function MapEntrySerializer_0(keySerializer, valueSerializer) {
@@ -21928,6 +21978,7 @@ exports.debug = debug; // for test
       $this$buildClassSerialDescriptor.element$default_m7h690_k$('first', tmp, null, false, 12, null);
       var tmp_0 = $valueSerializer._get_descriptor__684124924_bbb664_k$();
       $this$buildClassSerialDescriptor.element$default_m7h690_k$('second', tmp_0, null, false, 12, null);
+      return Unit_getInstance();
     };
   }
   function PairSerializer_0(keySerializer, valueSerializer) {
@@ -21989,6 +22040,7 @@ exports.debug = debug; // for test
       $this$buildClassSerialDescriptor.element$default_m7h690_k$('second', tmp_0, null, false, 12, null);
       var tmp_1 = this$0.cSerializer_1._get_descriptor__684124924_bbb664_k$();
       $this$buildClassSerialDescriptor.element$default_m7h690_k$('third', tmp_1, null, false, 12, null);
+      return Unit_getInstance();
     };
   }
   function TripleSerializer_0(aSerializer, bSerializer, cSerializer) {
@@ -22336,6 +22388,14 @@ exports.debug = debug; // for test
     interfaces: [Annotation],
     associatedObjectKey: 0
   };
+  function toNativeArrayImpl(_this__1828080292, eClass) {
+    var tmp$ret$0;
+    $l$block: {
+      tmp$ret$0 = copyToArray(_this__1828080292);
+      break $l$block;
+    }
+    return tmp$ret$0;
+  }
   function getChecked(_this__1828080292, index) {
     if (!(0 <= index ? index <= (_this__1828080292.length - 1 | 0) : false))
       throw IndexOutOfBoundsException_init_$Create$('Index ' + index + ' out of bounds ' + _get_indices__2241594442(_this__1828080292));
@@ -22416,14 +22476,6 @@ exports.debug = debug; // for test
     var tmp0_safe_receiver = tmp$ret$0.$metadata$;
     return (tmp0_safe_receiver == null ? null : tmp0_safe_receiver.kind) == 'interface';
   }
-  function toNativeArrayImpl(_this__1828080292, eClass) {
-    var tmp$ret$0;
-    $l$block: {
-      tmp$ret$0 = copyToArray(_this__1828080292);
-      break $l$block;
-    }
-    return tmp$ret$0;
-  }
   //region block: post-declaration
   SerialDescriptorImpl.prototype._get_isNullable__336674624_5kg3sw_k$ = _get_isNullable__336674624;
   SerialDescriptorImpl.prototype._get_isInline__2852845512_nuloag_k$ = _get_isInline__2852845512;
@@ -22437,6 +22489,18 @@ exports.debug = debug; // for test
   PrimitiveArrayDescriptor.prototype._get_isNullable__336674624_5kg3sw_k$ = _get_isNullable__336674624;
   PrimitiveArrayDescriptor.prototype._get_isInline__2852845512_nuloag_k$ = _get_isInline__2852845512;
   PrimitiveArrayDescriptor.prototype._get_annotations__1905959661_virbvx_k$ = _get_annotations__1905959661;
+  ArrayClassDesc.prototype._get_isNullable__336674624_5kg3sw_k$ = _get_isNullable__336674624;
+  ArrayClassDesc.prototype._get_isInline__2852845512_nuloag_k$ = _get_isInline__2852845512;
+  ArrayClassDesc.prototype._get_annotations__1905959661_virbvx_k$ = _get_annotations__1905959661;
+  MapLikeDescriptor.prototype._get_isNullable__336674624_5kg3sw_k$ = _get_isNullable__336674624;
+  MapLikeDescriptor.prototype._get_isInline__2852845512_nuloag_k$ = _get_isInline__2852845512;
+  MapLikeDescriptor.prototype._get_annotations__1905959661_virbvx_k$ = _get_annotations__1905959661;
+  LinkedHashMapClassDesc.prototype._get_isNullable__336674624_5kg3sw_k$ = _get_isNullable__336674624;
+  LinkedHashMapClassDesc.prototype._get_isInline__2852845512_nuloag_k$ = _get_isInline__2852845512;
+  LinkedHashMapClassDesc.prototype._get_annotations__1905959661_virbvx_k$ = _get_annotations__1905959661;
+  HashMapClassDesc.prototype._get_isNullable__336674624_5kg3sw_k$ = _get_isNullable__336674624;
+  HashMapClassDesc.prototype._get_isInline__2852845512_nuloag_k$ = _get_isInline__2852845512;
+  HashMapClassDesc.prototype._get_annotations__1905959661_virbvx_k$ = _get_annotations__1905959661;
   ArrayListClassDesc.prototype._get_isNullable__336674624_5kg3sw_k$ = _get_isNullable__336674624;
   ArrayListClassDesc.prototype._get_isInline__2852845512_nuloag_k$ = _get_isInline__2852845512;
   ArrayListClassDesc.prototype._get_annotations__1905959661_virbvx_k$ = _get_annotations__1905959661;
@@ -22446,18 +22510,6 @@ exports.debug = debug; // for test
   HashSetClassDesc.prototype._get_isNullable__336674624_5kg3sw_k$ = _get_isNullable__336674624;
   HashSetClassDesc.prototype._get_isInline__2852845512_nuloag_k$ = _get_isInline__2852845512;
   HashSetClassDesc.prototype._get_annotations__1905959661_virbvx_k$ = _get_annotations__1905959661;
-  MapLikeDescriptor.prototype._get_isNullable__336674624_5kg3sw_k$ = _get_isNullable__336674624;
-  MapLikeDescriptor.prototype._get_isInline__2852845512_nuloag_k$ = _get_isInline__2852845512;
-  MapLikeDescriptor.prototype._get_annotations__1905959661_virbvx_k$ = _get_annotations__1905959661;
-  HashMapClassDesc.prototype._get_isNullable__336674624_5kg3sw_k$ = _get_isNullable__336674624;
-  HashMapClassDesc.prototype._get_isInline__2852845512_nuloag_k$ = _get_isInline__2852845512;
-  HashMapClassDesc.prototype._get_annotations__1905959661_virbvx_k$ = _get_annotations__1905959661;
-  LinkedHashMapClassDesc.prototype._get_isNullable__336674624_5kg3sw_k$ = _get_isNullable__336674624;
-  LinkedHashMapClassDesc.prototype._get_isInline__2852845512_nuloag_k$ = _get_isInline__2852845512;
-  LinkedHashMapClassDesc.prototype._get_annotations__1905959661_virbvx_k$ = _get_annotations__1905959661;
-  ArrayClassDesc.prototype._get_isNullable__336674624_5kg3sw_k$ = _get_isNullable__336674624;
-  ArrayClassDesc.prototype._get_isInline__2852845512_nuloag_k$ = _get_isInline__2852845512;
-  ArrayClassDesc.prototype._get_annotations__1905959661_virbvx_k$ = _get_annotations__1905959661;
   PluginGeneratedSerialDescriptor.prototype._get_isNullable__336674624_5kg3sw_k$ = _get_isNullable__336674624;
   PluginGeneratedSerialDescriptor.prototype._get_isInline__2852845512_nuloag_k$ = _get_isInline__2852845512;
   PrimitiveSerialDescriptor_0.prototype._get_isNullable__336674624_5kg3sw_k$ = _get_isNullable__336674624;
@@ -22523,6 +22575,7 @@ exports.debug = debug; // for test
   _.$crossModule$.SerializersModuleCollector = SerializersModuleCollector;
   _.$crossModule$.DeserializationStrategy = DeserializationStrategy;
   _.$crossModule$.KSerializer = KSerializer;
+  _.$crossModule$.MissingFieldException = MissingFieldException;
   _.$crossModule$.SerializationException = SerializationException;
   _.$crossModule$.StringFormat = StringFormat;
   _.$crossModule$.serializer_1 = serializer;
@@ -22558,24 +22611,24 @@ exports.debug = debug; // for test
   var hashCode = kotlin_kotlin.$crossModule$.hashCode;
   var joinToString$default = kotlin_kotlin.$crossModule$.joinToString$default;
   var Map = kotlin_kotlin.$crossModule$.Map;
+  var List = kotlin_kotlin.$crossModule$.List;
+  var getKClassFromExpression = kotlin_kotlin.$crossModule$.getKClassFromExpression;
+  var getStringHashCode = kotlin_kotlin.$crossModule$.getStringHashCode;
   var LazyThreadSafetyMode_PUBLICATION_getInstance = kotlin_kotlin.$crossModule$.LazyThreadSafetyMode_PUBLICATION_getInstance;
   var lazy = kotlin_kotlin.$crossModule$.lazy;
   var SerializerFactory = kotlin_org_jetbrains_kotlinx_kotlinx_serialization_core.$crossModule$.SerializerFactory;
-  var getKClassFromExpression = kotlin_kotlin.$crossModule$.getKClassFromExpression;
-  var getStringHashCode = kotlin_kotlin.$crossModule$.getStringHashCode;
-  var List = kotlin_kotlin.$crossModule$.List;
   var toInt = kotlin_kotlin.$crossModule$.toInt;
   var toLong = kotlin_kotlin.$crossModule$.toLong_1;
   var toDouble = kotlin_kotlin.$crossModule$.toDouble;
   var SEALED_getInstance = kotlin_org_jetbrains_kotlinx_kotlinx_serialization_core.$crossModule$.SEALED_getInstance;
   var buildSerialDescriptor$default = kotlin_org_jetbrains_kotlinx_kotlinx_serialization_core.$crossModule$.buildSerialDescriptor$default;
   var KSerializer = kotlin_org_jetbrains_kotlinx_kotlinx_serialization_core.$crossModule$.KSerializer;
+  var STRING_getInstance = kotlin_org_jetbrains_kotlinx_kotlinx_serialization_core.$crossModule$.STRING_getInstance;
   var StringCompanionObject_getInstance = kotlin_kotlin.$crossModule$.StringCompanionObject_getInstance;
   var serializer = kotlin_org_jetbrains_kotlinx_kotlinx_serialization_core.$crossModule$.serializer;
   var MapSerializer = kotlin_org_jetbrains_kotlinx_kotlinx_serialization_core.$crossModule$.MapSerializer;
   var SerialDescriptor = kotlin_org_jetbrains_kotlinx_kotlinx_serialization_core.$crossModule$.SerialDescriptor;
   var ListSerializer = kotlin_org_jetbrains_kotlinx_kotlinx_serialization_core.$crossModule$.ListSerializer;
-  var STRING_getInstance = kotlin_org_jetbrains_kotlinx_kotlinx_serialization_core.$crossModule$.STRING_getInstance;
   var ENUM_getInstance = kotlin_org_jetbrains_kotlinx_kotlinx_serialization_core.$crossModule$.ENUM_getInstance;
   var PrimitiveSerialDescriptor = kotlin_org_jetbrains_kotlinx_kotlinx_serialization_core.$crossModule$.PrimitiveSerialDescriptor;
   var isInterface = kotlin_kotlin.$crossModule$.isInterface;
@@ -22601,6 +22654,10 @@ exports.debug = debug; // for test
   var ensureNotNull = kotlin_kotlin.$crossModule$.ensureNotNull;
   var emptyMap = kotlin_kotlin.$crossModule$.emptyMap;
   var getValue = kotlin_kotlin.$crossModule$.getValue;
+  var copyOf = kotlin_kotlin.$crossModule$.copyOf_7;
+  var copyOf_0 = kotlin_kotlin.$crossModule$.copyOf_8;
+  var fillArrayVal = kotlin_kotlin.$crossModule$.fillArrayVal;
+  var LIST_getInstance = kotlin_org_jetbrains_kotlinx_kotlinx_serialization_core.$crossModule$.LIST_getInstance;
   var LinkedHashMap_init_$Create$ = kotlin_kotlin.$crossModule$.LinkedHashMap_init_$Create$;
   var DeepRecursiveFunction = kotlin_kotlin.$crossModule$.DeepRecursiveFunction;
   var invoke = kotlin_kotlin.$crossModule$.invoke;
@@ -22616,23 +22673,23 @@ exports.debug = debug; // for test
   var PolymorphicKind = kotlin_org_jetbrains_kotlinx_kotlinx_serialization_core.$crossModule$.PolymorphicKind;
   var PrimitiveKind = kotlin_org_jetbrains_kotlinx_kotlinx_serialization_core.$crossModule$.PrimitiveKind;
   var MAP_getInstance = kotlin_org_jetbrains_kotlinx_kotlinx_serialization_core.$crossModule$.MAP_getInstance;
-  var LIST_getInstance = kotlin_org_jetbrains_kotlinx_kotlinx_serialization_core.$crossModule$.LIST_getInstance;
   var ENUM = kotlin_org_jetbrains_kotlinx_kotlinx_serialization_core.$crossModule$.ENUM;
   var contextual = kotlin_org_jetbrains_kotlinx_kotlinx_serialization_core.$crossModule$.contextual;
   var SerializersModuleCollector = kotlin_org_jetbrains_kotlinx_kotlinx_serialization_core.$crossModule$.SerializersModuleCollector;
   var isObject = kotlin_kotlin.$crossModule$.isObject;
   var AbstractDecoder = kotlin_org_jetbrains_kotlinx_kotlinx_serialization_core.$crossModule$.AbstractDecoder;
+  var plus = kotlin_kotlin.$crossModule$.plus_2;
+  var MissingFieldException = kotlin_org_jetbrains_kotlinx_kotlinx_serialization_core.$crossModule$.MissingFieldException;
+  var decodeSerializableElement$default = kotlin_org_jetbrains_kotlinx_kotlinx_serialization_core.$crossModule$.decodeSerializableElement$default;
   var toLong_0 = kotlin_kotlin.$crossModule$.toLong;
   var IllegalArgumentException = kotlin_kotlin.$crossModule$.IllegalArgumentException;
   var isFinite = kotlin_kotlin.$crossModule$.isFinite_1;
   var isFinite_0 = kotlin_kotlin.$crossModule$.isFinite;
   var decodeSequentially = kotlin_org_jetbrains_kotlinx_kotlinx_serialization_core.$crossModule$.decodeSequentially;
   var decodeCollectionSize = kotlin_org_jetbrains_kotlinx_kotlinx_serialization_core.$crossModule$.decodeCollectionSize;
-  var decodeSerializableElement$default = kotlin_org_jetbrains_kotlinx_kotlinx_serialization_core.$crossModule$.decodeSerializableElement$default;
   var numberToChar = kotlin_kotlin.$crossModule$.numberToChar;
   var Char__toInt_impl_2402388783 = kotlin_kotlin.$crossModule$.Char__toInt_impl_2402388783;
   var equals_0 = kotlin_kotlin.$crossModule$.equals_1;
-  var fillArrayVal = kotlin_kotlin.$crossModule$.fillArrayVal;
   var toByte = kotlin_kotlin.$crossModule$.toByte;
   var NamedValueDecoder = kotlin_org_jetbrains_kotlinx_kotlinx_serialization_core.$crossModule$.NamedValueDecoder;
   var IllegalArgumentException_init_$Create$_0 = kotlin_kotlin.$crossModule$.IllegalArgumentException_init_$Create$;
@@ -22642,7 +22699,7 @@ exports.debug = debug; // for test
   var single = kotlin_kotlin.$crossModule$.single;
   var jsonCachedSerialNames = kotlin_org_jetbrains_kotlinx_kotlinx_serialization_core.$crossModule$.jsonCachedSerialNames;
   var emptySet = kotlin_kotlin.$crossModule$.emptySet;
-  var plus = kotlin_kotlin.$crossModule$.plus;
+  var plus_0 = kotlin_kotlin.$crossModule$.plus;
   var toList = kotlin_kotlin.$crossModule$.toList;
   var Enum = kotlin_kotlin.$crossModule$.Enum;
   var getContextualDescriptor = kotlin_org_jetbrains_kotlinx_kotlinx_serialization_core.$crossModule$.getContextualDescriptor;
@@ -22663,16 +22720,16 @@ exports.debug = debug; // for test
   Default.prototype.constructor = Default;
   JsonImpl.prototype = Object.create(Json.prototype);
   JsonImpl.prototype.constructor = JsonImpl;
-  JsonObject.prototype = Object.create(JsonElement.prototype);
-  JsonObject.prototype.constructor = JsonObject;
   JsonPrimitive.prototype = Object.create(JsonElement.prototype);
   JsonPrimitive.prototype.constructor = JsonPrimitive;
-  JsonNull.prototype = Object.create(JsonPrimitive.prototype);
-  JsonNull.prototype.constructor = JsonNull;
-  JsonLiteral.prototype = Object.create(JsonPrimitive.prototype);
-  JsonLiteral.prototype.constructor = JsonLiteral;
+  JsonObject.prototype = Object.create(JsonElement.prototype);
+  JsonObject.prototype.constructor = JsonObject;
   JsonArray.prototype = Object.create(JsonElement.prototype);
   JsonArray.prototype.constructor = JsonArray;
+  JsonLiteral.prototype = Object.create(JsonPrimitive.prototype);
+  JsonLiteral.prototype.constructor = JsonLiteral;
+  JsonNull.prototype = Object.create(JsonPrimitive.prototype);
+  JsonNull.prototype.constructor = JsonNull;
   JsonException.prototype = Object.create(SerializationException.prototype);
   JsonException.prototype.constructor = JsonException;
   JsonEncodingException.prototype = Object.create(JsonException.prototype);
@@ -23013,6 +23070,33 @@ exports.debug = debug; // for test
       new Companion_0();
     return Companion_instance_0;
   }
+  function JsonPrimitive() {
+    Companion_getInstance_2();
+    JsonElement.call(this);
+  }
+  JsonPrimitive.prototype.toString = function () {
+    return this._get_content__1558689208_ps04ag_k$();
+  };
+  JsonPrimitive.$metadata$ = {
+    simpleName: 'JsonPrimitive',
+    kind: 'class',
+    interfaces: [],
+    associatedObjects: {0: JsonPrimitiveSerializer_getInstance}
+  };
+  function Companion_1() {
+    Companion_instance_1 = this;
+  }
+  Companion_1.$metadata$ = {
+    simpleName: 'Companion',
+    kind: 'object',
+    interfaces: []
+  };
+  var Companion_instance_1;
+  function Companion_getInstance_3() {
+    if (Companion_instance_1 == null)
+      new Companion_1();
+    return Companion_instance_1;
+  }
   function JsonObject$toString$lambda() {
     return function (_name_for_destructuring_parameter_0__1970834502) {
       var tmp$ret$0;
@@ -23055,7 +23139,7 @@ exports.debug = debug; // for test
     };
   }
   function JsonObject(content) {
-    Companion_getInstance_2();
+    Companion_getInstance_3();
     JsonElement.call(this);
     this.content_1 = content;
   }
@@ -23107,72 +23191,58 @@ exports.debug = debug; // for test
     interfaces: [Map],
     associatedObjects: {0: JsonObjectSerializer_getInstance}
   };
-  function JsonNull$$cachedSerializer$delegate$_anonymous__3817836111() {
-    return function () {
-      return JsonNullSerializer_getInstance();
-    };
+  function Companion_2() {
+    Companion_instance_2 = this;
   }
-  function JsonNull() {
-    JsonNull_instance = this;
-    JsonPrimitive.call(this);
-    this.content_1 = 'null';
-    var tmp = this;
-    var tmp_0 = LazyThreadSafetyMode_PUBLICATION_getInstance();
-    tmp.$cachedSerializer$delegate_1 = lazy(tmp_0, JsonNull$$cachedSerializer$delegate$_anonymous__3817836111());
-  }
-  JsonNull.prototype._get_content__1558689208_ps04ag_k$ = function () {
-    return this.content_1;
-  };
-  JsonNull.prototype.serializer_9w0wvi_k$ = function () {
-    return this.$cachedSerializer$delegate_1._get_value__3683422336_a43j40_k$();
-  };
-  JsonNull.prototype.serializer_5xgt5t_k$ = function (typeParamsSerializers) {
-    return this.serializer_9w0wvi_k$();
-  };
-  JsonNull.$metadata$ = {
-    simpleName: 'JsonNull',
-    kind: 'object',
-    interfaces: [SerializerFactory],
-    associatedObjects: {0: JsonNullSerializer_getInstance}
-  };
-  var JsonNull_instance;
-  function JsonNull_getInstance() {
-    if (JsonNull_instance == null)
-      new JsonNull();
-    return JsonNull_instance;
-  }
-  function Companion_1() {
-    Companion_instance_1 = this;
-  }
-  Companion_1.$metadata$ = {
+  Companion_2.$metadata$ = {
     simpleName: 'Companion',
     kind: 'object',
     interfaces: []
   };
-  var Companion_instance_1;
-  function Companion_getInstance_3() {
-    if (Companion_instance_1 == null)
-      new Companion_1();
-    return Companion_instance_1;
+  var Companion_instance_2;
+  function Companion_getInstance_4() {
+    if (Companion_instance_2 == null)
+      new Companion_2();
+    return Companion_instance_2;
   }
-  function JsonPrimitive() {
-    Companion_getInstance_3();
+  function JsonArray(content) {
+    Companion_getInstance_4();
     JsonElement.call(this);
+    this.content_1 = content;
   }
-  JsonPrimitive.prototype.toString = function () {
-    return this._get_content__1558689208_ps04ag_k$();
+  JsonArray.prototype._get_size__809037418_ddoh9m_k$ = function () {
+    return this.content_1._get_size__809037418_ddoh9m_k$();
   };
-  JsonPrimitive.$metadata$ = {
-    simpleName: 'JsonPrimitive',
+  JsonArray.prototype.containsAll_o6wx2e_k$ = function (elements) {
+    return this.content_1.containsAll_jr3fla_k$(elements);
+  };
+  JsonArray.prototype.containsAll_jr3fla_k$ = function (elements) {
+    return this.containsAll_o6wx2e_k$(elements);
+  };
+  JsonArray.prototype.get_fkrdnv_k$ = function (index) {
+    return this.content_1.get_fkrdnv_k$(index);
+  };
+  JsonArray.prototype.isEmpty_y1axqb_k$ = function () {
+    return this.content_1.isEmpty_y1axqb_k$();
+  };
+  JsonArray.prototype.iterator_jk1svi_k$ = function () {
+    return this.content_1.iterator_jk1svi_k$();
+  };
+  JsonArray.prototype.equals = function (other) {
+    return equals(this.content_1, other);
+  };
+  JsonArray.prototype.hashCode = function () {
+    return hashCode(this.content_1);
+  };
+  JsonArray.prototype.toString = function () {
+    return joinToString$default(this.content_1, ',', '[', ']', 0, null, null, 56, null);
+  };
+  JsonArray.$metadata$ = {
+    simpleName: 'JsonArray',
     kind: 'class',
-    interfaces: [],
-    associatedObjects: {0: JsonPrimitiveSerializer_getInstance}
+    interfaces: [List],
+    associatedObjects: {0: JsonArraySerializer_getInstance}
   };
-  function JsonPrimitive_0(value) {
-    if (value == null)
-      return JsonNull_getInstance();
-    return new JsonLiteral(value, true);
-  }
   function JsonLiteral(body, isString) {
     JsonPrimitive.call(this);
     this.isString_1 = isString;
@@ -23237,58 +23307,45 @@ exports.debug = debug; // for test
     kind: 'class',
     interfaces: []
   };
-  function Companion_2() {
-    Companion_instance_2 = this;
+  function JsonNull$$cachedSerializer$delegate$_anonymous__3817836111() {
+    return function () {
+      return JsonNullSerializer_getInstance();
+    };
   }
-  Companion_2.$metadata$ = {
-    simpleName: 'Companion',
+  function JsonNull() {
+    JsonNull_instance = this;
+    JsonPrimitive.call(this);
+    this.content_1 = 'null';
+    var tmp = this;
+    var tmp_0 = LazyThreadSafetyMode_PUBLICATION_getInstance();
+    tmp.$cachedSerializer$delegate_1 = lazy(tmp_0, JsonNull$$cachedSerializer$delegate$_anonymous__3817836111());
+  }
+  JsonNull.prototype._get_content__1558689208_ps04ag_k$ = function () {
+    return this.content_1;
+  };
+  JsonNull.prototype.serializer_9w0wvi_k$ = function () {
+    return this.$cachedSerializer$delegate_1._get_value__3683422336_a43j40_k$();
+  };
+  JsonNull.prototype.serializer_5xgt5t_k$ = function (typeParamsSerializers) {
+    return this.serializer_9w0wvi_k$();
+  };
+  JsonNull.$metadata$ = {
+    simpleName: 'JsonNull',
     kind: 'object',
-    interfaces: []
+    interfaces: [SerializerFactory],
+    associatedObjects: {0: JsonNullSerializer_getInstance}
   };
-  var Companion_instance_2;
-  function Companion_getInstance_4() {
-    if (Companion_instance_2 == null)
-      new Companion_2();
-    return Companion_instance_2;
+  var JsonNull_instance;
+  function JsonNull_getInstance() {
+    if (JsonNull_instance == null)
+      new JsonNull();
+    return JsonNull_instance;
   }
-  function JsonArray(content) {
-    Companion_getInstance_4();
-    JsonElement.call(this);
-    this.content_1 = content;
+  function JsonPrimitive_0(value) {
+    if (value == null)
+      return JsonNull_getInstance();
+    return new JsonLiteral(value, true);
   }
-  JsonArray.prototype._get_size__809037418_ddoh9m_k$ = function () {
-    return this.content_1._get_size__809037418_ddoh9m_k$();
-  };
-  JsonArray.prototype.containsAll_o6wx2e_k$ = function (elements) {
-    return this.content_1.containsAll_jr3fla_k$(elements);
-  };
-  JsonArray.prototype.containsAll_jr3fla_k$ = function (elements) {
-    return this.containsAll_o6wx2e_k$(elements);
-  };
-  JsonArray.prototype.get_fkrdnv_k$ = function (index) {
-    return this.content_1.get_fkrdnv_k$(index);
-  };
-  JsonArray.prototype.isEmpty_y1axqb_k$ = function () {
-    return this.content_1.isEmpty_y1axqb_k$();
-  };
-  JsonArray.prototype.iterator_jk1svi_k$ = function () {
-    return this.content_1.iterator_jk1svi_k$();
-  };
-  JsonArray.prototype.equals = function (other) {
-    return equals(this.content_1, other);
-  };
-  JsonArray.prototype.hashCode = function () {
-    return hashCode(this.content_1);
-  };
-  JsonArray.prototype.toString = function () {
-    return joinToString$default(this.content_1, ',', '[', ']', 0, null, null, 56, null);
-  };
-  JsonArray.$metadata$ = {
-    simpleName: 'JsonArray',
-    kind: 'class',
-    interfaces: [List],
-    associatedObjects: {0: JsonArraySerializer_getInstance}
-  };
   function _get_booleanOrNull__1934131903(_this__1828080292) {
     return toBooleanStrictOrNull(_this__1828080292._get_content__1558689208_ps04ag_k$());
   }
@@ -23382,6 +23439,7 @@ exports.debug = debug; // for test
       $this$buildSerialDescriptor.element$default_m7h690_k$('JsonObject', tmp_2, null, false, 12, null);
       var tmp_3 = defer(JsonElementSerializer$descriptor$lambda$lambda_3());
       $this$buildSerialDescriptor.element$default_m7h690_k$('JsonArray', tmp_3, null, false, 12, null);
+      return Unit_getInstance();
     };
   }
   function JsonElementSerializer() {
@@ -23407,6 +23465,34 @@ exports.debug = debug; // for test
     if (JsonElementSerializer_instance == null)
       new JsonElementSerializer();
     return JsonElementSerializer_instance;
+  }
+  function JsonPrimitiveSerializer() {
+    JsonPrimitiveSerializer_instance = this;
+    var tmp = this;
+    var tmp_0 = STRING_getInstance();
+    tmp.descriptor_1 = buildSerialDescriptor$default('kotlinx.serialization.json.JsonPrimitive', tmp_0, [], null, 12, null);
+  }
+  JsonPrimitiveSerializer.prototype._get_descriptor__684124924_bbb664_k$ = function () {
+    return this.descriptor_1;
+  };
+  JsonPrimitiveSerializer.prototype.deserialize_2t41fm_k$ = function (decoder) {
+    var result = asJsonDecoder(decoder).decodeJsonElement_6lz9ye_k$();
+    if (!(result instanceof JsonPrimitive))
+      throw JsonDecodingException_0(-1, 'Unexpected JSON element, expected JsonPrimitive, had ' + getKClassFromExpression(result), toString(result));
+    else {
+    }
+    return result;
+  };
+  JsonPrimitiveSerializer.$metadata$ = {
+    simpleName: 'JsonPrimitiveSerializer',
+    kind: 'object',
+    interfaces: [KSerializer]
+  };
+  var JsonPrimitiveSerializer_instance;
+  function JsonPrimitiveSerializer_getInstance() {
+    if (JsonPrimitiveSerializer_instance == null)
+      new JsonPrimitiveSerializer();
+    return JsonPrimitiveSerializer_instance;
   }
   function JsonObjectDescriptor() {
     JsonObjectDescriptor_instance = this;
@@ -23550,37 +23636,6 @@ exports.debug = debug; // for test
       new JsonArraySerializer();
     return JsonArraySerializer_instance;
   }
-  function defer(deferred) {
-    return new defer$1(deferred);
-  }
-  function JsonPrimitiveSerializer() {
-    JsonPrimitiveSerializer_instance = this;
-    var tmp = this;
-    var tmp_0 = STRING_getInstance();
-    tmp.descriptor_1 = buildSerialDescriptor$default('kotlinx.serialization.json.JsonPrimitive', tmp_0, [], null, 12, null);
-  }
-  JsonPrimitiveSerializer.prototype._get_descriptor__684124924_bbb664_k$ = function () {
-    return this.descriptor_1;
-  };
-  JsonPrimitiveSerializer.prototype.deserialize_2t41fm_k$ = function (decoder) {
-    var result = asJsonDecoder(decoder).decodeJsonElement_6lz9ye_k$();
-    if (!(result instanceof JsonPrimitive))
-      throw JsonDecodingException_0(-1, 'Unexpected JSON element, expected JsonPrimitive, had ' + getKClassFromExpression(result), toString(result));
-    else {
-    }
-    return result;
-  };
-  JsonPrimitiveSerializer.$metadata$ = {
-    simpleName: 'JsonPrimitiveSerializer',
-    kind: 'object',
-    interfaces: [KSerializer]
-  };
-  var JsonPrimitiveSerializer_instance;
-  function JsonPrimitiveSerializer_getInstance() {
-    if (JsonPrimitiveSerializer_instance == null)
-      new JsonPrimitiveSerializer();
-    return JsonPrimitiveSerializer_instance;
-  }
   function JsonNullSerializer() {
     JsonNullSerializer_instance = this;
     var tmp = this;
@@ -23609,6 +23664,9 @@ exports.debug = debug; // for test
     if (JsonNullSerializer_instance == null)
       new JsonNullSerializer();
     return JsonNullSerializer_instance;
+  }
+  function defer(deferred) {
+    return new defer$1(deferred);
   }
   function JsonLiteralSerializer() {
     JsonLiteralSerializer_instance = this;
@@ -23738,8 +23796,8 @@ exports.debug = debug; // for test
     return new JsonEncodingException("Value of type '" + keyDescriptor._get_serialName__1025298892_gyfpos_k$() + "' can't be used in JSON as a key in the map. " + ("It should have either primitive or enum kind, but its kind is '" + keyDescriptor._get_kind__801637687_d99vlj_k$() + "'.\n") + _get_allowStructuredMapKeysHint__3890899950());
   }
   function throwInvalidFloatingPointDecoded(_this__1828080292, result) {
-    var tmp = 'Unexpected special floating-point value ' + toString(result) + '. By default, ' + 'non-finite floating point values are prohibited because they do not conform JSON specification. ' + _get_specialFlowingValuesHint__2362587175();
-    _this__1828080292.fail$default_ojg9wb_k$(tmp, 0, 2, null);
+    var tmp = 'Unexpected special floating-point value ' + toString(result) + '. By default, ' + 'non-finite floating point values are prohibited because they do not conform JSON specification';
+    _this__1828080292.fail$default_p0pca1_k$(tmp, 0, _get_specialFlowingValuesHint__2362587175(), 2, null);
   }
   function JsonDecodingException(message) {
     JsonException.call(this, message);
@@ -23915,12 +23973,184 @@ exports.debug = debug; // for test
       JsonAlternativeNamesKey = new Key();
     }
   }
+  function Tombstone() {
+    Tombstone_instance = this;
+  }
+  Tombstone.$metadata$ = {
+    simpleName: 'Tombstone',
+    kind: 'object',
+    interfaces: []
+  };
+  var Tombstone_instance;
+  function Tombstone_getInstance() {
+    if (Tombstone_instance == null)
+      new Tombstone();
+    return Tombstone_instance;
+  }
+  function resize($this) {
+    var newSize = imul($this.currentDepth_1, 2);
+    $this.currentObjectPath_1 = copyOf($this.currentObjectPath_1, newSize);
+    $this.indicies_1 = copyOf_0($this.indicies_1, newSize);
+  }
+  function JsonPath() {
+    var tmp = this;
+    var tmp$ret$0;
+    $l$block: {
+      tmp$ret$0 = fillArrayVal(Array(8), null);
+      break $l$block;
+    }
+    tmp.currentObjectPath_1 = tmp$ret$0;
+    var tmp_0 = this;
+    var tmp_1 = 0;
+    var tmp_2 = 8;
+    var tmp_3 = new Int32Array(tmp_2);
+    while (tmp_1 < tmp_2) {
+      var tmp_4 = tmp_1;
+      var tmp$ret$1;
+      $l$block_0: {
+        tmp$ret$1 = -1;
+        break $l$block_0;
+      }
+      tmp_3[tmp_4] = tmp$ret$1;
+      tmp_1 = tmp_1 + 1 | 0;
+    }
+    tmp_0.indicies_1 = tmp_3;
+    this.currentDepth_1 = -1;
+  }
+  JsonPath.prototype.pushDescriptor_yqld09_k$ = function (sd) {
+    var tmp0_this = this;
+    tmp0_this.currentDepth_1 = tmp0_this.currentDepth_1 + 1 | 0;
+    var depth = tmp0_this.currentDepth_1;
+    if (depth === this.currentObjectPath_1.length) {
+      resize(this);
+    }
+    this.currentObjectPath_1[depth] = sd;
+  };
+  JsonPath.prototype.updateDescriptorIndex_64kjsa_k$ = function (index) {
+    this.indicies_1[this.currentDepth_1] = index;
+  };
+  JsonPath.prototype.updateCurrentMapKey_rvnz6l_k$ = function (key) {
+    var tmp;
+    if (!(this.indicies_1[this.currentDepth_1] === -2)) {
+      var tmp0_this = this;
+      tmp0_this.currentDepth_1 = tmp0_this.currentDepth_1 + 1 | 0;
+      tmp = tmp0_this.currentDepth_1 === this.currentObjectPath_1.length;
+    } else {
+      tmp = false;
+    }
+    if (tmp) {
+      resize(this);
+    } else {
+    }
+    this.currentObjectPath_1[this.currentDepth_1] = key;
+    this.indicies_1[this.currentDepth_1] = -2;
+  };
+  JsonPath.prototype.resetCurrentMapKey_1lk2sk_k$ = function () {
+    if (this.indicies_1[this.currentDepth_1] === -2) {
+      this.currentObjectPath_1[this.currentDepth_1] = Tombstone_getInstance();
+    }
+  };
+  JsonPath.prototype.popDescriptor_wfdf7z_k$ = function () {
+    var depth = this.currentDepth_1;
+    if (this.indicies_1[depth] === -2) {
+      this.indicies_1[depth] = -1;
+      var tmp0_this = this;
+      var tmp1 = tmp0_this.currentDepth_1;
+      tmp0_this.currentDepth_1 = tmp1 - 1 | 0;
+      Unit_getInstance();
+    }
+    if (!(this.currentDepth_1 === -1)) {
+      var tmp2_this = this;
+      var tmp3 = tmp2_this.currentDepth_1;
+      tmp2_this.currentDepth_1 = tmp3 - 1 | 0;
+      Unit_getInstance();
+    }
+  };
+  JsonPath.prototype.getPath_18su3p_k$ = function () {
+    var tmp$ret$1;
+    $l$block_0: {
+      {
+      }
+      var tmp$ret$0;
+      $l$block: {
+        var tmp0_apply_0_1 = StringBuilder_init_$Create$();
+        {
+        }
+        {
+          tmp0_apply_0_1.append_ssq29y_k$('$');
+          Unit_getInstance();
+          {
+            var tmp0_repeat_0_3 = this.currentDepth_1 + 1 | 0;
+            {
+            }
+            var inductionVariable = 0;
+            if (inductionVariable < tmp0_repeat_0_3)
+              do {
+                var index_2_5 = inductionVariable;
+                inductionVariable = inductionVariable + 1 | 0;
+                {
+                  var element_4_6 = this.currentObjectPath_1[index_2_5];
+                  if (!(element_4_6 == null) ? isInterface(element_4_6, SerialDescriptor) : false) {
+                    if (equals(element_4_6._get_kind__801637687_d99vlj_k$(), LIST_getInstance())) {
+                      if (!(this.indicies_1[index_2_5] === -1)) {
+                        tmp0_apply_0_1.append_ssq29y_k$('[');
+                        Unit_getInstance();
+                        tmp0_apply_0_1.append_t8pm91_k$(this.indicies_1[index_2_5]);
+                        Unit_getInstance();
+                        tmp0_apply_0_1.append_ssq29y_k$(']');
+                        Unit_getInstance();
+                      }
+                    } else {
+                      var idx_5_7 = this.indicies_1[index_2_5];
+                      if (idx_5_7 >= 0) {
+                        tmp0_apply_0_1.append_ssq29y_k$('.');
+                        Unit_getInstance();
+                        tmp0_apply_0_1.append_ssq29y_k$(element_4_6.getElementName_ykpypc_k$(idx_5_7));
+                        Unit_getInstance();
+                      }
+                    }
+                  } else {
+                    if (!(element_4_6 === Tombstone_getInstance())) {
+                      tmp0_apply_0_1.append_ssq29y_k$('[');
+                      Unit_getInstance();
+                      tmp0_apply_0_1.append_ssq29y_k$("'");
+                      Unit_getInstance();
+                      tmp0_apply_0_1.append_t8pm91_k$(element_4_6);
+                      Unit_getInstance();
+                      tmp0_apply_0_1.append_ssq29y_k$("'");
+                      Unit_getInstance();
+                      tmp0_apply_0_1.append_ssq29y_k$(']');
+                      Unit_getInstance();
+                    } else {
+                    }
+                  }
+                }
+              }
+               while (inductionVariable < tmp0_repeat_0_3);
+          }
+        }
+        tmp$ret$0 = tmp0_apply_0_1;
+        break $l$block;
+      }
+      tmp$ret$1 = tmp$ret$0.toString();
+      break $l$block_0;
+    }
+    return tmp$ret$1;
+  };
+  JsonPath.prototype.toString = function () {
+    return this.getPath_18su3p_k$();
+  };
+  JsonPath.$metadata$ = {
+    simpleName: 'JsonPath',
+    kind: 'class',
+    interfaces: []
+  };
   function readObject($this) {
     var tmp$ret$2;
     $l$block_1: {
       var lastToken_1 = $this.lexer_1.consumeNextToken_trhodc_k$(_get_TC_BEGIN_OBJ__3637395738());
       if ($this.lexer_1.peekNextToken_1gqwr9_k$() === _get_TC_COMMA__1190675334()) {
-        $this.lexer_1.fail$default_ojg9wb_k$('Unexpected leading comma', 0, 2, null);
+        $this.lexer_1.fail$default_p0pca1_k$('Unexpected leading comma', 0, null, 6, null);
       }
       var tmp$ret$0;
       $l$block: {
@@ -23949,14 +24179,14 @@ exports.debug = debug; // for test
         else if (tmp0_subject_5 === _get_TC_END_OBJ__4135196520())
           break $l$loop;
         else {
-          $this.lexer_1.fail$default_ojg9wb_k$('Expected end of the object or comma', 0, 2, null);
+          $this.lexer_1.fail$default_p0pca1_k$('Expected end of the object or comma', 0, null, 6, null);
         }
       }
       if (lastToken_1 === _get_TC_BEGIN_OBJ__3637395738()) {
         $this.lexer_1.consumeNextToken_trhodc_k$(_get_TC_END_OBJ__4135196520());
         Unit_getInstance();
       } else if (lastToken_1 === _get_TC_COMMA__1190675334()) {
-        $this.lexer_1.fail$default_ojg9wb_k$('Unexpected trailing comma', 0, 2, null);
+        $this.lexer_1.fail$default_p0pca1_k$('Unexpected trailing comma', 0, null, 6, null);
       }
       tmp$ret$2 = new JsonObject(result_2);
       break $l$block_1;
@@ -23972,7 +24202,7 @@ exports.debug = debug; // for test
   function readArray($this) {
     var lastToken = $this.lexer_1.consumeNextToken_uf1vsa_k$();
     if ($this.lexer_1.peekNextToken_1gqwr9_k$() === _get_TC_COMMA__1190675334()) {
-      $this.lexer_1.fail$default_ojg9wb_k$('Unexpected leading comma', 0, 2, null);
+      $this.lexer_1.fail$default_p0pca1_k$('Unexpected leading comma', 0, null, 6, null);
     }
     var tmp$ret$0;
     $l$block: {
@@ -23996,7 +24226,8 @@ exports.debug = debug; // for test
               tmp$ret$1 = 'Expected end of the array or comma';
               break $l$block_0;
             }
-            tmp0_require_0.fail_8sige4_k$(tmp$ret$1, tmp2_require_0);
+            var tmp = tmp$ret$1;
+            tmp0_require_0.fail$default_p0pca1_k$(tmp, tmp2_require_0, null, 4, null);
           }
         }
       }
@@ -24005,7 +24236,7 @@ exports.debug = debug; // for test
       $this.lexer_1.consumeNextToken_trhodc_k$(_get_TC_END_LIST__3634487903());
       Unit_getInstance();
     } else if (lastToken === _get_TC_COMMA__1190675334()) {
-      $this.lexer_1.fail$default_ojg9wb_k$('Unexpected trailing comma', 0, 2, null);
+      $this.lexer_1.fail$default_p0pca1_k$('Unexpected trailing comma', 0, null, 6, null);
     }
     return new JsonArray(result);
   }
@@ -24071,7 +24302,7 @@ exports.debug = debug; // for test
                     continue $sm;
                   } else {
                     var tmp_0 = this;
-                    this.this$0__1.lexer_1.fail$default_ojg9wb_k$("Can't begin reading element, unexpected token", 0, 2, null);
+                    this.this$0__1.lexer_1.fail$default_p0pca1_k$("Can't begin reading element, unexpected token", 0, null, 6, null);
                   }
                   Unit_getInstance();
                 }
@@ -24135,7 +24366,7 @@ exports.debug = debug; // for test
             this._set_exceptionState__118868437_8fc1n_k$(5);
             this.lastToken_10__1 = this._this__1828080292__1.lexer_1.consumeNextToken_trhodc_k$(_get_TC_BEGIN_OBJ__3637395738());
             if (this._this__1828080292__1.lexer_1.peekNextToken_1gqwr9_k$() === _get_TC_COMMA__1190675334()) {
-              this._this__1828080292__1.lexer_1.fail$default_ojg9wb_k$('Unexpected leading comma', 0, 2, null);
+              this._this__1828080292__1.lexer_1.fail$default_p0pca1_k$('Unexpected leading comma', 0, null, 6, null);
             }
 
             var tmp_0 = this;
@@ -24173,7 +24404,7 @@ exports.debug = debug; // for test
                 this._set_state__1256591060_i39zdo_k$(4);
                 continue $sm;
               } else {
-                this._this__1828080292__1.lexer_1.fail$default_ojg9wb_k$('Expected end of the object or comma', 0, 2, null);
+                this._this__1828080292__1.lexer_1.fail$default_p0pca1_k$('Expected end of the object or comma', 0, null, 6, null);
               }
             }
 
@@ -24186,7 +24417,7 @@ exports.debug = debug; // for test
               this._this__1828080292__1.lexer_1.consumeNextToken_trhodc_k$(_get_TC_END_OBJ__4135196520());
               Unit_getInstance();
             } else if (this.lastToken_10__1 === _get_TC_COMMA__1190675334()) {
-              this._this__1828080292__1.lexer_1.fail$default_ojg9wb_k$('Unexpected trailing comma', 0, 2, null);
+              this._this__1828080292__1.lexer_1.fail$default_p0pca1_k$('Unexpected trailing comma', 0, null, 6, null);
             }
 
             return new JsonObject(this.result_21__1);
@@ -24240,7 +24471,7 @@ exports.debug = debug; // for test
       tmp = readArray(this);
     } else {
       var tmp_1 = 'Cannot begin reading element, unexpected token: ' + token;
-      this.lexer_1.fail$default_ojg9wb_k$(tmp_1, 0, 2, null);
+      this.lexer_1.fail$default_p0pca1_k$(tmp_1, 0, null, 6, null);
     }
     return tmp;
   };
@@ -24454,7 +24685,7 @@ exports.debug = debug; // for test
   }
   function checkLeadingComma($this) {
     if ($this.lexer_1.peekNextToken_1gqwr9_k$() === _get_TC_COMMA__1190675334()) {
-      $this.lexer_1.fail$default_ojg9wb_k$('Unexpected leading comma', 0, 2, null);
+      $this.lexer_1.fail$default_p0pca1_k$('Unexpected leading comma', 0, null, 6, null);
     }
   }
   function decodeMapIndex($this) {
@@ -24480,7 +24711,8 @@ exports.debug = debug; // for test
               tmp$ret$0 = 'Unexpected trailing comma';
               break $l$block;
             }
-            tmp0_require_0.fail_8sige4_k$(tmp$ret$0, tmp2_require_0);
+            var tmp_0 = tmp$ret$0;
+            tmp0_require_0.fail$default_p0pca1_k$(tmp_0, tmp2_require_0, null, 4, null);
           }
         } else {
           var tmp3_require_0 = $this.lexer_1;
@@ -24492,7 +24724,8 @@ exports.debug = debug; // for test
               tmp$ret$1 = 'Expected comma after the key-value pair';
               break $l$block_0;
             }
-            tmp3_require_0.fail_8sige4_k$(tmp$ret$1, tmp5_require_0);
+            var tmp_1 = tmp$ret$1;
+            tmp3_require_0.fail$default_p0pca1_k$(tmp_1, tmp5_require_0, null, 4, null);
           }
         }
       }
@@ -24501,7 +24734,7 @@ exports.debug = debug; // for test
       tmp = tmp0_this.currentIndex_1;
     } else {
       if (hasComma) {
-        $this.lexer_1.fail$default_ojg9wb_k$("Expected '}', but had ',' instead", 0, 2, null);
+        $this.lexer_1.fail$default_p0pca1_k$("Expected '}', but had ',' instead", 0, null, 6, null);
       }
       tmp = Companion_getInstance()._get_DECODE_DONE__3215019198_huz1aa_k$();
     }
@@ -24592,7 +24825,7 @@ exports.debug = debug; // for test
       }
     }
     if (hasComma) {
-      $this.lexer_1.fail$default_ojg9wb_k$('Unexpected trailing comma', 0, 2, null);
+      $this.lexer_1.fail$default_p0pca1_k$('Unexpected trailing comma', 0, null, 6, null);
     }
     var tmp1_safe_receiver = $this.elementMarker_1;
     var tmp2_elvis_lhs = tmp1_safe_receiver == null ? null : tmp1_safe_receiver.nextUnmarkedIndex_u6mxd2_k$();
@@ -24611,14 +24844,14 @@ exports.debug = debug; // for test
     var tmp;
     if ($this.lexer_1.canConsumeValue_oljqd7_k$()) {
       if (!($this.currentIndex_1 === -1) ? !hasComma : false) {
-        $this.lexer_1.fail$default_ojg9wb_k$('Expected end of the array or comma', 0, 2, null);
+        $this.lexer_1.fail$default_p0pca1_k$('Expected end of the array or comma', 0, null, 6, null);
       }
       var tmp0_this = $this;
       tmp0_this.currentIndex_1 = tmp0_this.currentIndex_1 + 1 | 0;
       tmp = tmp0_this.currentIndex_1;
     } else {
       if (hasComma) {
-        $this.lexer_1.fail$default_ojg9wb_k$('Unexpected trailing comma', 0, 2, null);
+        $this.lexer_1.fail$default_p0pca1_k$('Unexpected trailing comma', 0, null, 6, null);
       }
       tmp = Companion_getInstance()._get_DECODE_DONE__3215019198_huz1aa_k$();
     }
@@ -24653,10 +24886,21 @@ exports.debug = debug; // for test
     return (new JsonTreeReader(this.json_1._get_configuration__311089819_557qfv_k$(), this.lexer_1)).read_22xsm_k$();
   };
   StreamingJsonDecoder.prototype.decodeSerializableValue_xpp80o_k$ = function (deserializer) {
-    return decodeSerializableValuePolymorphic(this, deserializer);
+    try {
+      return decodeSerializableValuePolymorphic(this, deserializer);
+    } catch ($p) {
+      if ($p instanceof MissingFieldException) {
+        throw new MissingFieldException(plus($p.message, ' at path: ') + this.lexer_1._get_path__806022854_dbvv7q_k$().getPath_18su3p_k$(), $p);
+      } else {
+        {
+          throw $p;
+        }
+      }
+    }
   };
   StreamingJsonDecoder.prototype.beginStructure_dv3yt3_k$ = function (descriptor) {
     var newMode = switchMode(this.json_1, descriptor);
+    this.lexer_1._get_path__806022854_dbvv7q_k$().pushDescriptor_yqld09_k$(descriptor);
     this.lexer_1.consumeNextToken_ev7fkz_k$(newMode._get_begin__3114373192_c9kma1_k$());
     checkLeadingComma(this);
     var tmp0_subject = newMode;
@@ -24686,6 +24930,7 @@ exports.debug = debug; // for test
       skipLeftoverElements(this, descriptor);
     }
     this.lexer_1.consumeNextToken_ev7fkz_k$(this.mode_1._get_end__856968982_ypp5lj_k$());
+    this.lexer_1._get_path__806022854_dbvv7q_k$().popDescriptor_wfdf7z_k$();
   };
   StreamingJsonDecoder.prototype.decodeNotNullMark_us4ba1_k$ = function () {
     var tmp;
@@ -24703,17 +24948,38 @@ exports.debug = debug; // for test
   StreamingJsonDecoder.prototype.decodeNull_jzrmuj_k$ = function () {
     return null;
   };
+  StreamingJsonDecoder.prototype.decodeSerializableElement_5lsbxj_k$ = function (descriptor, index, deserializer, previousValue) {
+    var isMapKey = this.mode_1.equals(WriteMode_MAP_getInstance()) ? (index & 1) === 0 : false;
+    if (isMapKey) {
+      this.lexer_1._get_path__806022854_dbvv7q_k$().resetCurrentMapKey_1lk2sk_k$();
+    }
+    var value = AbstractDecoder.prototype.decodeSerializableElement_5lsbxj_k$.call(this, descriptor, index, deserializer, previousValue);
+    if (isMapKey) {
+      this.lexer_1._get_path__806022854_dbvv7q_k$().updateCurrentMapKey_rvnz6l_k$(value);
+    }
+    return value;
+  };
   StreamingJsonDecoder.prototype.decodeElementIndex_nk5a2l_k$ = function (descriptor) {
     var tmp0_subject = this.mode_1;
     var tmp0 = tmp0_subject._get_ordinal__3363892928_fec5kw_k$();
-    switch (tmp0) {
-      case 0:
-        return decodeObjectIndex(this, descriptor);
-      case 2:
-        return decodeMapIndex(this);
-      default:
-        return decodeListIndex(this);
+    {
+      var index;
+      switch (tmp0) {
+        case 0:
+          index = decodeObjectIndex(this, descriptor);
+          break;
+        case 2:
+          index = decodeMapIndex(this);
+          break;
+        default:
+          index = decodeListIndex(this);
+          break;
+      }
     }
+    if (!this.mode_1.equals(WriteMode_MAP_getInstance())) {
+      this.lexer_1._get_path__806022854_dbvv7q_k$().updateDescriptorIndex_64kjsa_k$(index);
+    }
+    return index;
   };
   StreamingJsonDecoder.prototype.decodeBoolean_m0aca_k$ = function () {
     var tmp;
@@ -24728,7 +24994,7 @@ exports.debug = debug; // for test
     var value = this.lexer_1.consumeNumericLiteral_rdea66_k$();
     if (!value.equals(toLong_0(value.toByte_edm0nx_k$()))) {
       var tmp = "Failed to parse byte for input '" + toString(value) + "'";
-      this.lexer_1.fail$default_ojg9wb_k$(tmp, 0, 2, null);
+      this.lexer_1.fail$default_p0pca1_k$(tmp, 0, null, 6, null);
     }
     return value.toByte_edm0nx_k$();
   };
@@ -24736,7 +25002,7 @@ exports.debug = debug; // for test
     var value = this.lexer_1.consumeNumericLiteral_rdea66_k$();
     if (!value.equals(toLong_0(value.toShort_ja8oqn_k$()))) {
       var tmp = "Failed to parse short for input '" + toString(value) + "'";
-      this.lexer_1.fail$default_ojg9wb_k$(tmp, 0, 2, null);
+      this.lexer_1.fail$default_p0pca1_k$(tmp, 0, null, 6, null);
     }
     return value.toShort_ja8oqn_k$();
   };
@@ -24744,7 +25010,7 @@ exports.debug = debug; // for test
     var value = this.lexer_1.consumeNumericLiteral_rdea66_k$();
     if (!value.equals(toLong_0(value.toInt_1tsl84_k$()))) {
       var tmp = "Failed to parse int for input '" + toString(value) + "'";
-      this.lexer_1.fail$default_ojg9wb_k$(tmp, 0, 2, null);
+      this.lexer_1.fail$default_p0pca1_k$(tmp, 0, null, 6, null);
     }
     return value.toInt_1tsl84_k$();
   };
@@ -24783,7 +25049,7 @@ exports.debug = debug; // for test
       } catch ($p) {
         if ($p instanceof IllegalArgumentException) {
           var tmp = "Failed to parse type 'float' for input '" + input_1 + "'";
-          tmp0_parseString_0.fail$default_ojg9wb_k$(tmp, 0, 2, null);
+          tmp0_parseString_0.fail$default_p0pca1_k$(tmp, 0, null, 6, null);
         } else {
           {
             throw $p;
@@ -24813,7 +25079,7 @@ exports.debug = debug; // for test
       } catch ($p) {
         if ($p instanceof IllegalArgumentException) {
           var tmp = "Failed to parse type 'double' for input '" + input_1 + "'";
-          tmp0_parseString_0.fail$default_ojg9wb_k$(tmp, 0, 2, null);
+          tmp0_parseString_0.fail$default_p0pca1_k$(tmp, 0, null, 6, null);
         } else {
           {
             throw $p;
@@ -24831,7 +25097,7 @@ exports.debug = debug; // for test
     var string = this.lexer_1.consumeStringLenient_9oypvu_k$();
     if (!(string.length === 1)) {
       var tmp = "Expected single char, but got '" + string + "'";
-      this.lexer_1.fail$default_ojg9wb_k$(tmp, 0, 2, null);
+      this.lexer_1.fail$default_p0pca1_k$(tmp, 0, null, 6, null);
     }
     return charSequenceGet(string, 0);
   };
@@ -25814,7 +26080,7 @@ exports.debug = debug; // for test
         tmp$ret$0 = tmp0_elvis_lhs_1 == null ? emptySet() : tmp0_elvis_lhs_1;
         break $l$block;
       }
-      tmp_1 = plus(tmp_2, tmp$ret$0);
+      tmp_1 = plus_0(tmp_2, tmp$ret$0);
     }
     var names = tmp_1;
     var tmp1_iterator = this._get_value__3683422336_a43j40_k$()._get_keys__801529559_d97k5z_k$().iterator_jk1svi_k$();
@@ -26068,7 +26334,7 @@ exports.debug = debug; // for test
     var currentPosition = startPosition;
     currentPosition = $this.prefetchOrEof_yw6lb3_k$(currentPosition);
     if (currentPosition === -1) {
-      $this.fail$default_ojg9wb_k$('Expected escape sequence to continue, got EOF', 0, 2, null);
+      $this.fail$default_p0pca1_k$('Expected escape sequence to continue, got EOF', 0, null, 6, null);
     }
     var tmp = $this._get_source__263461456_4cuw5s_k$();
     var tmp0 = currentPosition;
@@ -26085,7 +26351,7 @@ exports.debug = debug; // for test
     var c = escapeToChar(tmp$ret$0);
     if (equals(new Char(c), new Char(_Char___init__impl__380027157(0)))) {
       var tmp_0 = "Invalid escaped char '" + new Char(currentChar) + "'";
-      $this.fail$default_ojg9wb_k$(tmp_0, 0, 2, null);
+      $this.fail$default_p0pca1_k$(tmp_0, 0, null, 6, null);
     }
     $this.escapedString_1.append_t8oh9e_k$(c);
     Unit_getInstance();
@@ -26096,7 +26362,7 @@ exports.debug = debug; // for test
       $this.currentPosition_1 = startPos;
       $this.ensureHaveChars_2ohzs6_k$();
       if (($this.currentPosition_1 + 4 | 0) >= charSequenceLength(source)) {
-        $this.fail$default_ojg9wb_k$('Unexpected EOF during unicode escape', 0, 2, null);
+        $this.fail$default_p0pca1_k$('Unexpected EOF during unicode escape', 0, null, 6, null);
       }
       return appendHex($this, source, $this.currentPosition_1);
     }
@@ -26148,14 +26414,14 @@ exports.debug = debug; // for test
       tmp = (tmp_2 - tmp$ret$5 | 0) + 10 | 0;
     } else {
       var tmp_3 = "Invalid toHexChar char '" + new Char(character) + "' in unicode escape";
-      $this.fail$default_ojg9wb_k$(tmp_3, 0, 2, null);
+      $this.fail$default_p0pca1_k$(tmp_3, 0, null, 6, null);
     }
     return tmp;
   }
   function consumeBoolean($this, start) {
     var current = $this.prefetchOrEof_yw6lb3_k$(start);
     if (current >= charSequenceLength($this._get_source__263461456_4cuw5s_k$()) ? true : current === -1) {
-      $this.fail$default_ojg9wb_k$('EOF', 0, 2, null);
+      $this.fail$default_p0pca1_k$('EOF', 0, null, 6, null);
     }
     var tmp$ret$0;
     $l$block: {
@@ -26188,7 +26454,7 @@ exports.debug = debug; // for test
       } else {
         {
           var tmp_1 = "Expected valid boolean literal prefix, but had '" + $this.consumeStringLenient_9oypvu_k$() + "'";
-          $this.fail$default_ojg9wb_k$(tmp_1, 0, 2, null);
+          $this.fail$default_p0pca1_k$(tmp_1, 0, null, 6, null);
         }
       }
     }
@@ -26196,7 +26462,7 @@ exports.debug = debug; // for test
   }
   function consumeBooleanLiteral($this, literalSuffix, current) {
     if ((charSequenceLength($this._get_source__263461456_4cuw5s_k$()) - current | 0) < literalSuffix.length) {
-      $this.fail$default_ojg9wb_k$('Unexpected end of boolean literal', 0, 2, null);
+      $this.fail$default_p0pca1_k$('Unexpected end of boolean literal', 0, null, 6, null);
     }
     var inductionVariable = 0;
     var last = charSequenceLength(literalSuffix) - 1 | 0;
@@ -26219,7 +26485,7 @@ exports.debug = debug; // for test
         }
         if (!(tmp === (tmp$ret$1 | 32))) {
           var tmp_0 = "Expected valid boolean literal prefix, but had '" + $this.consumeStringLenient_9oypvu_k$() + "'";
-          $this.fail$default_ojg9wb_k$(tmp_0, 0, 2, null);
+          $this.fail$default_p0pca1_k$(tmp_0, 0, null, 6, null);
         } else {
         }
       }
@@ -26228,6 +26494,7 @@ exports.debug = debug; // for test
   }
   function AbstractJsonLexer() {
     this.currentPosition_1 = 0;
+    this.path_1 = new JsonPath();
     this.peekedString_1 = null;
     this.escapedString_1 = StringBuilder_init_$Create$();
   }
@@ -26236,6 +26503,9 @@ exports.debug = debug; // for test
   };
   AbstractJsonLexer.prototype._get_currentPosition__868736655_ed81hr_k$ = function () {
     return this.currentPosition_1;
+  };
+  AbstractJsonLexer.prototype._get_path__806022854_dbvv7q_k$ = function () {
+    return this.path_1;
   };
   AbstractJsonLexer.prototype.ensureHaveChars_2ohzs6_k$ = function () {
   };
@@ -26247,7 +26517,7 @@ exports.debug = debug; // for test
     var nextToken = this.consumeNextToken_uf1vsa_k$();
     if (!(nextToken === 10)) {
       var tmp = 'Expected EOF after parsing, but had ' + new Char(charSequenceGet(this._get_source__263461456_4cuw5s_k$(), this.currentPosition_1 - 1 | 0)) + ' instead';
-      this.fail$default_ojg9wb_k$(tmp, 0, 2, null);
+      this.fail$default_p0pca1_k$(tmp, 0, null, 6, null);
     }
   };
   AbstractJsonLexer.prototype.consumeNextToken_trhodc_k$ = function (expected) {
@@ -26283,7 +26553,7 @@ exports.debug = debug; // for test
     tmp0_this.currentPosition_1 = tmp0_this.currentPosition_1 - 1 | 0;
     Unit_getInstance();
     if ((this.currentPosition_1 >= 0 ? equals(new Char(expected), new Char(_Char___init__impl__380027157(34))) : false) ? this.consumeStringLenient_9oypvu_k$() === 'null' : false) {
-      this.fail_8sige4_k$("Expected string literal but 'null' literal was found.\nUse 'coerceInputValues = true' in 'Json {}` builder to coerce nulls to default values.", this.currentPosition_1 - 4 | 0);
+      this.fail_icoaf1_k$("Expected string literal but 'null' literal was found", this.currentPosition_1 - 4 | 0, "Use 'coerceInputValues = true' in 'Json {}` builder to coerce nulls to default values.");
     }
     this.fail_pcesvg_k$(charToTokenClass(expected));
   };
@@ -26291,7 +26561,9 @@ exports.debug = debug; // for test
     var tmp0_subject = expectedToken;
     var expected = tmp0_subject === 1 ? "quotation mark '\"'" : tmp0_subject === 4 ? "comma ','" : tmp0_subject === 5 ? "semicolon ':'" : tmp0_subject === 6 ? "start of the object '{'" : tmp0_subject === 7 ? "end of the object '}'" : tmp0_subject === 8 ? "start of the array '['" : tmp0_subject === 9 ? "end of the array ']'" : 'valid token';
     var s = (this.currentPosition_1 === charSequenceLength(this._get_source__263461456_4cuw5s_k$()) ? true : this.currentPosition_1 <= 0) ? 'EOF' : toString_0(charSequenceGet(this._get_source__263461456_4cuw5s_k$(), this.currentPosition_1 - 1 | 0));
-    this.fail_8sige4_k$('Expected ' + expected + ", but had '" + s + "' instead", this.currentPosition_1 - 1 | 0);
+    var tmp = 'Expected ' + expected + ", but had '" + s + "' instead";
+    var tmp_0 = this.currentPosition_1 - 1 | 0;
+    this.fail$default_p0pca1_k$(tmp, tmp_0, null, 4, null);
   };
   AbstractJsonLexer.prototype.peekNextToken_1gqwr9_k$ = function () {
     var source = this._get_source__263461456_4cuw5s_k$();
@@ -26390,7 +26662,8 @@ exports.debug = debug; // for test
         usedAppend = true;
         currentPosition = this.prefetchOrEof_yw6lb3_k$(appendEscape(this, lastPosition, currentPosition));
         if (currentPosition === -1) {
-          this.fail_8sige4_k$('EOF', currentPosition);
+          var tmp = currentPosition;
+          this.fail$default_p0pca1_k$('EOF', tmp, null, 4, null);
         }
         lastPosition = currentPosition;
       } else {
@@ -26400,7 +26673,8 @@ exports.debug = debug; // for test
           this.appendRange_nm7sha_k$(lastPosition, currentPosition);
           currentPosition = this.prefetchOrEof_yw6lb3_k$(currentPosition);
           if (currentPosition === -1) {
-            this.fail_8sige4_k$('EOF', currentPosition);
+            var tmp_0 = currentPosition;
+            this.fail$default_p0pca1_k$('EOF', tmp_0, null, 4, null);
           }
           lastPosition = currentPosition;
         } else {
@@ -26408,20 +26682,20 @@ exports.debug = debug; // for test
       }
       char = charSequenceGet(source, currentPosition);
     }
-    var tmp;
+    var tmp_1;
     if (!usedAppend) {
-      tmp = this.substring_8we4nj_k$(lastPosition, currentPosition);
+      tmp_1 = this.substring_8we4nj_k$(lastPosition, currentPosition);
     } else {
-      tmp = decodedString(this, lastPosition, currentPosition);
+      tmp_1 = decodedString(this, lastPosition, currentPosition);
     }
-    var string = tmp;
+    var string = tmp_1;
     this.currentPosition_1 = currentPosition + 1 | 0;
     return string;
   };
   AbstractJsonLexer.prototype.consumeStringLenientNotNull_m2rgts_k$ = function () {
     var result = this.consumeStringLenient_9oypvu_k$();
     if (result === 'null' ? wasUnquotedString(this) : false) {
-      this.fail$default_ojg9wb_k$("Unexpected 'null' value instead of string literal", 0, 2, null);
+      this.fail$default_p0pca1_k$("Unexpected 'null' value instead of string literal", 0, null, 6, null);
     }
     return result;
   };
@@ -26431,15 +26705,16 @@ exports.debug = debug; // for test
     }
     var current = this.skipWhitespaces_ox013r_k$();
     if (current >= charSequenceLength(this._get_source__263461456_4cuw5s_k$()) ? true : current === -1) {
-      this.fail_8sige4_k$('EOF', current);
+      var tmp = current;
+      this.fail$default_p0pca1_k$('EOF', tmp, null, 4, null);
     }
     var token = charToTokenClass(charSequenceGet(this._get_source__263461456_4cuw5s_k$(), current));
     if (token === 1) {
       return this.consumeString_j3j2z7_k$();
     }
     if (!(token === 0)) {
-      var tmp = 'Expected beginning of the string, but got ' + new Char(charSequenceGet(this._get_source__263461456_4cuw5s_k$(), current));
-      this.fail$default_ojg9wb_k$(tmp, 0, 2, null);
+      var tmp_0 = 'Expected beginning of the string, but got ' + new Char(charSequenceGet(this._get_source__263461456_4cuw5s_k$(), current));
+      this.fail$default_p0pca1_k$(tmp_0, 0, null, 6, null);
     }
     var usedAppend = false;
     while (charToTokenClass(charSequenceGet(this._get_source__263461456_4cuw5s_k$(), current)) === 0) {
@@ -26457,13 +26732,13 @@ exports.debug = debug; // for test
         }
       }
     }
-    var tmp_0;
+    var tmp_1;
     if (!usedAppend) {
-      tmp_0 = this.substring_8we4nj_k$(this.currentPosition_1, current);
+      tmp_1 = this.substring_8we4nj_k$(this.currentPosition_1, current);
     } else {
-      tmp_0 = decodedString(this, this.currentPosition_1, current);
+      tmp_1 = decodedString(this, this.currentPosition_1, current);
     }
-    var result = tmp_0;
+    var result = tmp_1;
     this.currentPosition_1 = current;
     return result;
   };
@@ -26502,16 +26777,16 @@ exports.debug = debug; // for test
         Unit_getInstance();
       } else if (tmp0_subject === 9) {
         if (!(last(tokenStack) === 8))
-          throw JsonDecodingException_0(this.currentPosition_1, 'found ] instead of }', this._get_source__263461456_4cuw5s_k$());
+          throw JsonDecodingException_0(this.currentPosition_1, 'found ] instead of } at path: ' + this.path_1, this._get_source__263461456_4cuw5s_k$());
         removeLast(tokenStack);
         Unit_getInstance();
       } else if (tmp0_subject === 7) {
         if (!(last(tokenStack) === 6))
-          throw JsonDecodingException_0(this.currentPosition_1, 'found } instead of ]', this._get_source__263461456_4cuw5s_k$());
+          throw JsonDecodingException_0(this.currentPosition_1, 'found } instead of ] at path: ' + this.path_1, this._get_source__263461456_4cuw5s_k$());
         removeLast(tokenStack);
         Unit_getInstance();
       } else if (tmp0_subject === 10) {
-        this.fail$default_ojg9wb_k$('Unexpected end of input due to malformed JSON during ignoring unknown keys', 0, 2, null);
+        this.fail$default_p0pca1_k$('Unexpected end of input due to malformed JSON during ignoring unknown keys', 0, null, 6, null);
       }
       this.consumeNextToken_uf1vsa_k$();
       Unit_getInstance();
@@ -26525,27 +26800,43 @@ exports.debug = debug; // for test
   AbstractJsonLexer.prototype.failOnUnknownKey_6lfa5c_k$ = function (key) {
     var processed = this.substring_8we4nj_k$(0, this.currentPosition_1);
     var lastIndexOf = lastIndexOf$default(processed, key, 0, false, 6, null);
-    this.fail_8sige4_k$("Encountered an unknown key '" + key + "'.\nUse 'ignoreUnknownKeys = true' in 'Json {}' builder to ignore unknown keys.", lastIndexOf);
+    this.fail_icoaf1_k$("Encountered an unknown key '" + key + "'", lastIndexOf, "Use 'ignoreUnknownKeys = true' in 'Json {}' builder to ignore unknown keys.");
   };
-  AbstractJsonLexer.prototype.fail_8sige4_k$ = function (message, position) {
-    throw JsonDecodingException_0(position, message, this._get_source__263461456_4cuw5s_k$());
+  AbstractJsonLexer.prototype.fail_icoaf1_k$ = function (message, position, hint) {
+    var tmp;
+    var tmp$ret$0;
+    $l$block: {
+      tmp$ret$0 = charSequenceLength(hint) === 0;
+      break $l$block;
+    }
+    if (tmp$ret$0) {
+      tmp = '';
+    } else {
+      {
+        tmp = '\n' + hint;
+      }
+    }
+    var hintMessage = tmp;
+    throw JsonDecodingException_0(position, message + ' at path: ' + this.path_1.getPath_18su3p_k$() + hintMessage, this._get_source__263461456_4cuw5s_k$());
   };
-  AbstractJsonLexer.prototype.fail$default_ojg9wb_k$ = function (message, position, $mask0, $handler) {
+  AbstractJsonLexer.prototype.fail$default_p0pca1_k$ = function (message, position, hint, $mask0, $handler) {
     if (!(($mask0 & 2) === 0))
       position = this.currentPosition_1;
-    return this.fail_8sige4_k$(message, position);
+    if (!(($mask0 & 4) === 0))
+      hint = '';
+    return this.fail_icoaf1_k$(message, position, hint);
   };
   AbstractJsonLexer.prototype.consumeNumericLiteral_rdea66_k$ = function () {
     var current = this.skipWhitespaces_ox013r_k$();
     current = this.prefetchOrEof_yw6lb3_k$(current);
     if (current >= charSequenceLength(this._get_source__263461456_4cuw5s_k$()) ? true : current === -1) {
-      this.fail$default_ojg9wb_k$('EOF', 0, 2, null);
+      this.fail$default_p0pca1_k$('EOF', 0, null, 6, null);
     }
     var tmp;
     if (equals(new Char(charSequenceGet(this._get_source__263461456_4cuw5s_k$(), current)), new Char(_Char___init__impl__380027157(34)))) {
       current = current + 1 | 0;
       if (current === charSequenceLength(this._get_source__263461456_4cuw5s_k$())) {
-        this.fail$default_ojg9wb_k$('EOF', 0, 2, null);
+        this.fail$default_p0pca1_k$('EOF', 0, null, 6, null);
       } else {
       }
       tmp = true;
@@ -26561,7 +26852,7 @@ exports.debug = debug; // for test
       var ch = charSequenceGet(this._get_source__263461456_4cuw5s_k$(), current);
       if (equals(new Char(ch), new Char(_Char___init__impl__380027157(45)))) {
         if (!(current === start)) {
-          this.fail$default_ojg9wb_k$("Unexpected symbol '-' in numeric literal", 0, 2, null);
+          this.fail$default_p0pca1_k$("Unexpected symbol '-' in numeric literal", 0, null, 6, null);
         }
         isNegative = true;
         current = current + 1 | 0;
@@ -26577,7 +26868,7 @@ exports.debug = debug; // for test
       var digit = Char__minus_impl_3686210483(ch, _Char___init__impl__380027157(48));
       if (!(0 <= digit ? digit <= 9 : false)) {
         var tmp_0 = "Unexpected symbol '" + new Char(ch) + "' in numeric literal";
-        this.fail$default_ojg9wb_k$(tmp_0, 0, 2, null);
+        this.fail$default_p0pca1_k$(tmp_0, 0, null, 6, null);
       }
       var tmp$ret$1;
       $l$block_0: {
@@ -26593,18 +26884,18 @@ exports.debug = debug; // for test
       }
       accumulator = tmp$ret$1;
       if (accumulator.compareTo_n4fqi2_k$(new Long(0, 0)) > 0) {
-        this.fail$default_ojg9wb_k$('Numeric value overflow', 0, 2, null);
+        this.fail$default_p0pca1_k$('Numeric value overflow', 0, null, 6, null);
       }
     }
     if (start === current ? true : isNegative ? start === (current - 1 | 0) : false) {
-      this.fail$default_ojg9wb_k$('Expected numeric literal', 0, 2, null);
+      this.fail$default_p0pca1_k$('Expected numeric literal', 0, null, 6, null);
     }
     if (hasQuotation) {
       if (!hasChars) {
-        this.fail$default_ojg9wb_k$('EOF', 0, 2, null);
+        this.fail$default_p0pca1_k$('EOF', 0, null, 6, null);
       }
       if (!equals(new Char(charSequenceGet(this._get_source__263461456_4cuw5s_k$(), current)), new Char(_Char___init__impl__380027157(34)))) {
-        this.fail$default_ojg9wb_k$('Expected closing quotation mark', 0, 2, null);
+        this.fail$default_p0pca1_k$('Expected closing quotation mark', 0, null, 6, null);
       }
       current = current + 1 | 0;
       Unit_getInstance();
@@ -26616,7 +26907,7 @@ exports.debug = debug; // for test
     } else if (!accumulator.equals(Companion_getInstance_0()._get_MIN_VALUE__1378605517_mssatp_k$())) {
       tmp_1 = accumulator.unaryMinus_6uz0qp_k$();
     } else {
-      this.fail$default_ojg9wb_k$('Numeric value overflow', 0, 2, null);
+      this.fail$default_p0pca1_k$('Numeric value overflow', 0, null, 6, null);
     }
     return tmp_1;
   };
@@ -26626,7 +26917,7 @@ exports.debug = debug; // for test
   AbstractJsonLexer.prototype.consumeBooleanLenient_iqeqb9_k$ = function () {
     var current = this.skipWhitespaces_ox013r_k$();
     if (current === charSequenceLength(this._get_source__263461456_4cuw5s_k$())) {
-      this.fail$default_ojg9wb_k$('EOF', 0, 2, null);
+      this.fail$default_p0pca1_k$('EOF', 0, null, 6, null);
     }
     var tmp;
     if (equals(new Char(charSequenceGet(this._get_source__263461456_4cuw5s_k$(), current)), new Char(_Char___init__impl__380027157(34)))) {
@@ -26640,10 +26931,10 @@ exports.debug = debug; // for test
     var result = consumeBoolean(this, current);
     if (hasQuotation) {
       if (this.currentPosition_1 === charSequenceLength(this._get_source__263461456_4cuw5s_k$())) {
-        this.fail$default_ojg9wb_k$('EOF', 0, 2, null);
+        this.fail$default_p0pca1_k$('EOF', 0, null, 6, null);
       }
       if (!equals(new Char(charSequenceGet(this._get_source__263461456_4cuw5s_k$(), this.currentPosition_1)), new Char(_Char___init__impl__380027157(34)))) {
-        this.fail$default_ojg9wb_k$('Expected closing quotation mark', 0, 2, null);
+        this.fail$default_p0pca1_k$('Expected closing quotation mark', 0, null, 6, null);
       }
       var tmp0_this = this;
       tmp0_this.currentPosition_1 = tmp0_this.currentPosition_1 + 1 | 0;
@@ -26971,9 +27262,9 @@ exports.debug = debug; // for test
   defer$1.prototype._get_isInline__2852845512_nuloag_k$ = _get_isInline__2852845512;
   defer$1.prototype._get_annotations__1905959661_virbvx_k$ = _get_annotations__1905959661;
   PolymorphismValidator.prototype.contextual_7ekeez_k$ = contextual;
+  StreamingJsonDecoder.prototype.decodeSerializableElement$default_xyql7s_k$ = decodeSerializableElement$default;
   StreamingJsonDecoder.prototype.decodeSequentially_xlblqy_k$ = decodeSequentially;
   StreamingJsonDecoder.prototype.decodeCollectionSize_cd6i6s_k$ = decodeCollectionSize;
-  StreamingJsonDecoder.prototype.decodeSerializableElement$default_xyql7s_k$ = decodeSerializableElement$default;
   AbstractJsonTreeDecoder.prototype.decodeSerializableElement$default_xyql7s_k$ = decodeSerializableElement$default;
   AbstractJsonTreeDecoder.prototype.decodeSequentially_xlblqy_k$ = decodeSequentially;
   AbstractJsonTreeDecoder.prototype.decodeCollectionSize_cd6i6s_k$ = decodeCollectionSize;
@@ -29388,6 +29679,7 @@ exports.debug = debug; // for test
   function Github$jsonFormat$lambda() {
     return function ($this$Json) {
       $this$Json._set_ignoreUnknownKeys__1171269657_vwghbk_k$(true);
+      return Unit_getInstance();
     };
   }
   function Github$fetchPages$slambda(this$0, $deserializer, $path, $pageSize, resultContinuation) {
@@ -30046,6 +30338,7 @@ exports.debug = debug; // for test
         tmp$ret$3 = $cancellable_2_2.resumeWith_s3a3yh_k$(tmp$ret$2);
         break $l$block_2;
       }
+      return Unit_getInstance();
     };
   }
   function GithubJS$requestForText$lambda_0($req_4) {
@@ -30061,6 +30354,7 @@ exports.debug = debug; // for test
         break $l$block_0;
       }
       $req_4.destroy(tmp$ret$1);
+      return Unit_getInstance();
     };
   }
   function GithubJS$requestForText$lambda_1($chunks_4) {
@@ -30078,6 +30372,7 @@ exports.debug = debug; // for test
       var tmp0_plusAssign_0_6 = tmp$ret$1;
       $chunks_4.add_1j60pz_k$(tmp0_plusAssign_0_6);
       Unit_getInstance();
+      return Unit_getInstance();
     };
   }
   function GithubJS$requestForText$lambda_2($cancellable_2_2) {
@@ -30104,6 +30399,7 @@ exports.debug = debug; // for test
         tmp$ret$3 = $cancellable_2_2.resumeWith_s3a3yh_k$(tmp$ret$2);
         break $l$block_2;
       }
+      return Unit_getInstance();
     };
   }
   function GithubJS$requestForText$lambda_3($chunks_4, $cancellable_2_2) {
@@ -30140,6 +30436,7 @@ exports.debug = debug; // for test
         tmp$ret$2 = $cancellable_2_2.resumeWith_s3a3yh_k$(tmp$ret$1);
         break $l$block_1;
       }
+      return Unit_getInstance();
     };
   }
   function GithubJS$requestForText$lambda_4($res) {
@@ -30155,6 +30452,7 @@ exports.debug = debug; // for test
         break $l$block_0;
       }
       $res.destroy(tmp$ret$1);
+      return Unit_getInstance();
     };
   }
   function $requestForTextCOROUTINE$3(_this__1828080292, method, path, body, resultContinuation) {

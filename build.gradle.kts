@@ -16,7 +16,7 @@ kotlin {
         compilations["main"].packageJson {
         }
         compilations.all {
-            compileKotlinTask.kotlinOptions.freeCompilerArgs += listOf("-Xopt-in=kotlin.RequiresOptIn")
+            compileKotlinTask.kotlinOptions.freeCompilerArgs += listOf("-opt-in=kotlin.RequiresOptIn")
         }
     }
 }
@@ -34,6 +34,6 @@ dependencies {
 }
 
 actionPackaging {
-    nodeVersion.set("12.22.8")
+    nodeVersion.set("16.15.0")
     minify.set(false)
 }
