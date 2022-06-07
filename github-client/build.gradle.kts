@@ -12,7 +12,7 @@ kotlin {
         nodejs()
         useCommonJs()
         compilations.all {
-            compileKotlinTask.kotlinOptions.freeCompilerArgs += listOf("-Xopt-in=kotlin.RequiresOptIn")
+            compileKotlinTask.kotlinOptions.freeCompilerArgs += listOf("-opt-in=kotlin.RequiresOptIn")
         }
     }
 }
@@ -26,5 +26,5 @@ dependencies {
 
     testImplementation(kotlin("test-js"))
     testImplementation("org.araqnid.kotlin.assert-that:assert-that:0.1.1")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.2")
 }
