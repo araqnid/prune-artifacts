@@ -13,5 +13,5 @@ inputs:
     description: 'Prune only artifacts with this specific name. May be a comma-separated list to match multiple names'
     required: false
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'dist/index.js'
