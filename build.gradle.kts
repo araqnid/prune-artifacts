@@ -25,7 +25,7 @@ dependencies {
     api(kotlin("stdlib-js"))
     implementation(project(":github-client"))
     implementation(project(":actions-toolkit"))
-    implementation(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.1"))
+    implementation(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.3"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
 
     testImplementation(kotlin("test-js"))
