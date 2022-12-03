@@ -1,5 +1,5 @@
 plugins {
-    kotlin("js") version "1.6.21"
+    kotlin("js") version "1.7.22"
     kotlin("plugin.serialization") version "1.6.21" apply false
     id("package-github-action")
 }
