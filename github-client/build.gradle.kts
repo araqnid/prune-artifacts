@@ -18,7 +18,7 @@ dependencies {
     api(kotlin("stdlib-js"))
     api(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.4"))
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core")
-    implementation(platform("org.jetbrains.kotlinx:kotlinx-serialization-bom:1.3.3"))
+    implementation(platform("org.jetbrains.kotlinx:kotlinx-serialization-bom:1.5.0"))
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json")
 
     testImplementation(kotlin("test-js"))
