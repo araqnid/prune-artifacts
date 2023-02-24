@@ -1,6 +1,6 @@
 plugins {
-    kotlin("js") version "1.6.21"
-    kotlin("plugin.serialization") version "1.6.21" apply false
+    kotlin("js") version "1.8.10"
+    kotlin("plugin.serialization") version "1.8.10" apply false
     id("package-github-action")
 }
 
@@ -34,6 +34,16 @@ dependencies {
 }
 
 actionPackaging {
-    nodeVersion.set("16.15.0")
-    minify.set(false)
+    val nccVersionValue = properties["ncc.version"]
+    if (nccVersionValue is String) {
+        nccVersion.set(nccVersionValue)
+    }
+}
+
+node {
+    val nodejsVersion = properties["nodejs.version"]
+    if (nodejsVersion is String) {
+        download.set(true)
+        version.set(nodejsVersion)
+    }
 }

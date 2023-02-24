@@ -1,14 +1,22 @@
-name: "Gradle Build"
+name: Verify dist
 on:
   push:
+    branches:
+      - main
     paths-ignore:
       - '**/README.md'
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  build:
+  verify-dist:
+    name: Verify that 'dist' has been regenerated
+    if: github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v2
 
       - name: Set up JDK
         uses: actions/setup-java@v3
@@ -24,7 +32,11 @@ jobs:
       - name: Fix gradle.properties
         run: perl -lpe 'print unless /nodejs\.version/'
 
-      - name: Build
+      - name: Generate dist
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: build
+          arguments: package
+
+      - name: Compare dist with repo
+        run: |
+          git diff --exit-code dist
