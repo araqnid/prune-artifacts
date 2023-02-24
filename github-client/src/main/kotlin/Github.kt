@@ -1,27 +1,18 @@
 package github
 
+import js.core.get
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.NonCancellable
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.takeWhile
-import kotlinx.coroutines.flow.transformWhile
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.DeserializationStrategy
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.*
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.serializer
+import node.process.process
 
 interface GithubBackend {
     suspend fun requestForText(method: String, path: String, body: String?): TextResponse
@@ -44,11 +35,11 @@ class Github(private val backend: GithubBackend, private val defaultPageSize: In
         ignoreUnknownKeys = true
     }
 
-    private suspend fun <T> fetch(deserializer: DeserializationStrategy<T>, path: String): T {
-        val response = backend.requestForText("GET", path, null)
-        return when {
+    private fun verifySuccessful(path: String, response: GithubBackend.TextResponse, accept204: Boolean = false) {
+        when {
             response.status == 200 -> {
-                jsonFormat.decodeFromString(deserializer, response.text)
+            }
+            response.status == 204 && accept204 -> {
             }
             response.contentType != null && response.contentType.lowercase().startsWith("application/json") -> {
                 throw GithubException(path, response.status, jsonFormat.decodeFromString(response.text))
@@ -57,24 +48,29 @@ class Github(private val backend: GithubBackend, private val defaultPageSize: In
                 error("$path: HTTP error ${response.status}")
             }
         }
+    }
+
+    private suspend fun <T> fetch(deserializer: DeserializationStrategy<T>, path: String): T {
+        val response = backend.requestForText("GET", path, null)
+        verifySuccessful(path, response)
+        return jsonFormat.decodeFromString(deserializer, response.text)
     }
 
     private suspend fun delete(path: String) {
         val response = backend.requestForText("DELETE", path, null)
-        return when {
-            response.status == 200 || response.status == 204 -> {
-            }
-            response.contentType != null && response.contentType.lowercase().startsWith("application/json") -> {
-                throw GithubException(path, response.status, jsonFormat.decodeFromString(response.text))
-            }
-            else -> {
-                error("$path: HTTP error ${response.status}")
-            }
-        }
+        verifySuccessful(path, response, accept204 = true)
     }
 
+    private suspend fun <T> put(path: String, body: T, serializer: SerializationStrategy<T>) {
+        val response = backend.requestForText("PUT", path, jsonFormat.encodeToString(serializer, body))
+        verifySuccessful(path, response, accept204 = true)
+    }
+
+    private suspend inline fun <reified T> put(path: String, body: T)
+        = put(path, body, serializer())
+
     private fun <T> fetchPages(
-        deserializer: DeserializationStrategy<T>,
+        deserializer: DeserializationStrategy<out T>,
         path: String,
         pageSize: Int
     ): Flow<T> = flow {
@@ -91,17 +87,18 @@ class Github(private val backend: GithubBackend, private val defaultPageSize: In
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun <T> fetchCollection(
-        deserializer: DeserializationStrategy<Collection<T>>,
+        deserializer: DeserializationStrategy<out Collection<T>>,
         path: String,
         pageSize: Int
     ): Flow<T> = fetchPages(deserializer, path, pageSize).transformWhile { page ->
-        if (page.isNotEmpty()) emitAll(page.asFlow())
-        page.isNotEmpty()
+        emitAll(page.asFlow())
+        page.size == pageSize
     }
 
     private fun <T> fetchCollectionViaListWithCount(
-        deserializer: DeserializationStrategy<ListWithCount<T>>,
+        deserializer: DeserializationStrategy<out ListWithCount<T>>,
         path: String,
         pageSize: Int,
     ): Flow<T> = fetchPages(deserializer, path, pageSize).let { upstream ->
@@ -129,17 +126,52 @@ class Github(private val backend: GithubBackend, private val defaultPageSize: In
     fun getOrgRepos(orgName: String, pageSize: Int = defaultPageSize): Flow<Repository> =
         fetchCollection(serializer(), "/orgs/$orgName/repos", pageSize)
 
+    fun getOrgRepos(org: Organization, pageSize: Int = defaultPageSize): Flow<Repository> =
+        getOrgRepos(org.name, pageSize)
+
     fun getOrgTeams(orgName: String, pageSize: Int = defaultPageSize): Flow<Team> =
         fetchCollection(serializer(), "/orgs/$orgName/teams", pageSize)
 
+    fun getOrgTeams(org: Organization, pageSize: Int = defaultPageSize): Flow<Team> =
+        getOrgTeams(org.name, pageSize)
+
     fun getOrgTeamRepos(orgName: String, teamSlug: String, pageSize: Int = defaultPageSize): Flow<Repository> =
         fetchCollection(serializer(), "/orgs/$orgName/teams/$teamSlug/repos", pageSize)
+
+    fun getOrgTeamRepos(org: Organization, team: Team, pageSize: Int = defaultPageSize): Flow<Repository> =
+        getOrgTeamRepos(org.name, team.slug, pageSize)
 
     fun getRepoTeams(ownerName: String, repoName: String, pageSize: Int = defaultPageSize): Flow<Team> =
         fetchCollection(serializer(), "/repos/$ownerName/$repoName/teams", pageSize)
 
     fun getRepoTeams(repo: Repository, pageSize: Int = defaultPageSize): Flow<Team> =
         getRepoTeams(repo.owner.login, repo.name, pageSize)
+
+    suspend fun deleteRepoTeamPermission(orgName: String, teamSlug: String, ownerName: String, repoName: String) {
+        delete("/orgs/$orgName/teams/$teamSlug/repos/$ownerName/$repoName")
+    }
+
+    suspend fun deleteRepoTeamPermission(orgName: String, teamSlug: String, repo: Repository) =
+        deleteRepoTeamPermission(orgName, teamSlug, repo.owner.login, repo.name)
+
+    suspend fun deleteRepoTeamPermission(orgName: String, team: Team, repo: Repository) =
+        deleteRepoTeamPermission(orgName, team.slug, repo)
+
+    suspend fun deleteRepoTeamPermission(org: Organization, team: Team, repo: Repository) =
+        deleteRepoTeamPermission(org.name, team.slug, repo)
+
+    suspend fun updateRepoTeamPermission(orgName: String, teamSlug: String, ownerName: String, repoName: String, permission: String) {
+        put("/orgs/$orgName/teams/$teamSlug/repos/$ownerName/$repoName", RepoTeamPutPermissionBody(permission))
+    }
+
+    suspend fun updateRepoTeamPermission(orgName: String, teamSlug: String, repo: Repository, permission: String) =
+        updateRepoTeamPermission(orgName, teamSlug, repo.owner.login, repo.name, permission)
+
+    suspend fun updateRepoTeamPermission(orgName: String, team: Team, repo: Repository, permission: String) =
+        updateRepoTeamPermission(orgName, team.slug, repo, permission)
+
+    suspend fun updateRepoTeamPermission(org: Organization, team: Team, repo: Repository, permission: String) =
+        updateRepoTeamPermission(org.name, team, repo, permission)
 
     fun getRepoArtifacts(ownerName: String, repoName: String, pageSize: Int = defaultPageSize): Flow<Artifact> =
         fetchCollectionViaListWithCount(
@@ -200,7 +232,7 @@ class Github(private val backend: GithubBackend, private val defaultPageSize: In
     data class Organization(val id: Int, val name: String)
 
     @Serializable
-    data class Team(val id: Int, val name: String, val slug: String, val permission: String)
+    data class Team(val id: Int, val name: String, val slug: String, val permissions: Map<String, Boolean>? = null)
 
     @Serializable
     data class Artifact(
@@ -286,6 +318,9 @@ class Github(private val backend: GithubBackend, private val defaultPageSize: In
 
     @Serializable
     data class Error(val message: String, @SerialName("documentation_url") val documentationUrl: String? = null)
+
+    @Serializable
+    private data class RepoTeamPutPermissionBody(val permission: String)
 }
 
 class InstantSerializer : KSerializer<Instant> {
@@ -301,13 +336,8 @@ class InstantSerializer : KSerializer<Instant> {
     }
 }
 
-@JsModule("process")
-private external object Process {
-    val env: dynamic
-}
-
 private val defaultGithubToken: String?
-    get() = Process.env["GITHUB_TOKEN"].unsafeCast<String?>()
+    get() = process.env["GITHUB_TOKEN"].unsafeCast<String?>()
 
 /**
  * Use a GitHub client, providing it to the given block and disposing of it after the block is complete.
