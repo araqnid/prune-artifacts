@@ -1,4 +1,4 @@
 rootProject.name = "prune-artifacts"
 
-include("actions-toolkit", "github-client")
+include("github-client")
 includeBuild("package-action")

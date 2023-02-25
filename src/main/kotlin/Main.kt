@@ -1,10 +1,6 @@
 package pruneArtifacts
 
 import actions.core.info
-import actions.kotlin.GITHUB_REPOSITORY
-import actions.kotlin.getInput
-import actions.kotlin.getInputOrNull
-import actions.kotlin.runAction
 import github.useGithub
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter

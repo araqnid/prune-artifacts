@@ -28,21 +28,6 @@
     semver "^6.1.0"
     uuid "^3.3.3"
 
-"@actions/cache@latest":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@actions/cache/-/cache-2.0.1.tgz#87f9daa45f78169ba2be01f2b0f063bd6fdfc49b"
-  integrity sha512-GoxSLZFMLpAeHeE7hXqbOz81j+Mpvgs2o8HL2UlFQppXrrNcIsofFGyoH76htcZZPB/876f6NedFr2AS8Xd2Vw==
-  dependencies:
-    "@actions/core" "^1.2.6"
-    "@actions/exec" "^1.0.1"
-    "@actions/glob" "^0.1.0"
-    "@actions/http-client" "^1.0.9"
-    "@actions/io" "^1.0.1"
-    "@azure/ms-rest-js" "^2.6.0"
-    "@azure/storage-blob" "^12.8.0"
-    semver "^6.1.0"
-    uuid "^3.3.3"
-
 "@actions/core@^1.10.0", "@actions/core@^1.9.1":
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/@actions/core/-/core-1.10.0.tgz#44551c3c71163949a2f06e94d9ca2157a0cfac4f"
@@ -51,7 +36,7 @@
     "@actions/http-client" "^2.0.1"
     uuid "^8.3.2"
 
-"@actions/core@^1.2.6", "@actions/core@latest":
+"@actions/core@^1.2.6":
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/@actions/core/-/core-1.6.0.tgz#0568e47039bfb6a9170393a73f3b7eb3b22462cb"
   integrity sha512-NB1UAZomZlCV/LmJqkLhNTqtKfFXJZAUPcfl/zqG7EfsQdeUJtaWO98SGbuQ3pydJ3fHl2CvI/51OKYlCYYcaw==
@@ -81,7 +66,7 @@
     "@actions/core" "^1.9.1"
     minimatch "^3.0.4"
 
-"@actions/http-client@^1.0.11", "@actions/http-client@^1.0.9":
+"@actions/http-client@^1.0.11":
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/@actions/http-client/-/http-client-1.0.11.tgz#c58b12e9aa8b159ee39e7dd6cbd0e91d905633c0"
   integrity sha512-VRYHGQV1rqnROJqdMvGUbY/Kn8vriQe/F9HR2AlYHzmKuM/p3kjNuXhmdBfcVgsvRWTz5C5XW5xvndZrVBuAYg==

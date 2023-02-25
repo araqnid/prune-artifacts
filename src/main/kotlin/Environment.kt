@@ -1,23 +1,22 @@
-package actions.kotlin
+@file:Suppress("unused")
 
+package pruneArtifacts
+
+import js.core.get
+import node.process.process
 import kotlin.reflect.KProperty
-
-@JsModule("process")
-private external object Process {
-    val env: dynamic
-}
 
 private object ExpectedEnvironment {
     operator fun getValue(owner: Any?, property: KProperty<*>): String {
         val name = property.name
-        return Process.env[name].unsafeCast<String?>() ?: error("$name not set")
+        return process.env[name].unsafeCast<String?>() ?: kotlin.error("$name not set")
     }
 }
 
 private object OptionalEnvironment {
     operator fun getValue(owner: Any?, property: KProperty<*>): String? {
         val name = property.name
-        return Process.env[name].unsafeCast<String?>()
+        return process.env[name].unsafeCast<String?>()
     }
 }
 
