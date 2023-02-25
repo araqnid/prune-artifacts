@@ -12,7 +12,7 @@
     tmp "^0.2.1"
     tmp-promise "^3.0.2"
 
-"@actions/cache@^3.1.2":
+"@actions/cache@^3.1.4":
   version "3.1.4"
   resolved "https://registry.yarnpkg.com/@actions/cache/-/cache-3.1.4.tgz#409a2befcc7ed66633a194afbd30ab9360b7880a"
   integrity sha512-Uh9wsz7SxunfyqF3UY/wfHI81z97CYQrZs4NU+whzYd0N8emTaloB+XtrAq46X2RbQEOBjF6R090jKQpX4coGg==
@@ -225,7 +225,7 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.23.tgz#3b41a6e643589ac6442bdbd7a4a3ded62f33f7da"
   integrity sha512-UxDxWn7dl97rKVeVS61vErvw086aCYhDLyvRQZ5Rk65rZKepaFdm53GeqXaKBuOhED4e9uWq34IC3TdSdJJ2Gw==
 
-"@types/node@^18.13.0":
+"@types/node@^18.14.0":
   version "18.14.1"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-18.14.1.tgz#90dad8476f1e42797c49d6f8b69aaf9f876fc69f"
   integrity sha512-QH+37Qds3E0eDlReeboBxfHbX9omAcBCXEzswCu6jySP642jiM3cYSIkU/REqwhCUqXdonHFuBfJDiAJxMNhaQ==
