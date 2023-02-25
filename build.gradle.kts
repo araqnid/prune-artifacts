@@ -38,9 +38,9 @@ actionPackaging {
 }
 
 node {
-    val nodejsVersion = properties["nodejs.version"]
-    if (nodejsVersion is String) {
+    val nodeVersionFile = rootProject.projectDir.resolve(".nvmrc")
+    if (nodeVersionFile.exists()) {
+        version.set(nodeVersionFile.readText().trim())
         download.set(true)
-        version.set(nodejsVersion)
     }
 }
