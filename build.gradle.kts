@@ -21,7 +21,7 @@ dependencies {
     implementation(project(":github-client"))
     implementation(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.4"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
-    implementation(platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.495"))
+    implementation(platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.503"))
     implementation("org.jetbrains.kotlin-wrappers:kotlin-node")
     implementation("org.jetbrains.kotlin-wrappers:kotlin-actions-toolkit")
 
