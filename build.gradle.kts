@@ -31,16 +31,11 @@ dependencies {
 }
 
 actionPackaging {
-    val nccVersionValue = properties["ncc.version"]
-    if (nccVersionValue is String) {
-        nccVersion.set(nccVersionValue)
-    }
+    nccVersion.set(providers.gradleProperty("ncc.version").orElse("latest"))
 }
 
 node {
-    val nodeVersionFile = rootProject.projectDir.resolve(".nvmrc")
-    if (nodeVersionFile.exists()) {
-        version.set(nodeVersionFile.readText().trim())
-        download.set(true)
-    }
+    val nvmrc = providers.fileContents(layout.projectDirectory.file(".nvmrc")).asText.orElse("")
+    version.set(nvmrc)
+    download.set(nvmrc.map { it.isNotEmpty() })
 }
