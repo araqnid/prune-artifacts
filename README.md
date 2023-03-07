@@ -1,5 +1,8 @@
 # prune-artifacts
 
+[![Kotlin](https://img.shields.io/badge/kotlin-1.8.10-blue.svg)](http://kotlinlang.org)
+[![Gradle Build](https://github.com/araqnid/prune-artifacts/actions/workflows/gradle-build.yml/badge.svg)](https://github.com/araqnid/prune-artifacts/actions/workflows/gradle-build.yml)
+
 GitHub action to delete old/large artifacts from a repo. Also a vehicle for experimenting with writing a GitHub action
 in Kotlin.
 
