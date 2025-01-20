@@ -18,6 +18,10 @@ updates:
       timezone: Europe/London
     ignore:
       - dependency-name: org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom
+      - dependency-name: 'org.jetbrains.kotlinx:kotlinx-coroutines-bom'
+        update-types: [ 'version-update:semver-minor' ]
+      - dependency-name: 'org.jetbrains.kotlinx:kotlinx-serialization-bom'
+        update-types: [ 'version-update:semver-minor' ]
     groups:
       kotlin:
         patterns:
