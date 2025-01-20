@@ -4,6 +4,7 @@ on:
     paths-ignore:
       - '**/README.md'
       - '.github/dependabot.yml'
+      - 'action.yml'
 
 jobs:
   build:
