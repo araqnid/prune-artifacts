@@ -24,6 +24,8 @@ updates:
           - "jvm"
           - "js"
           - "plugin.serialization"
+        update-types:
+          - minor
 
   - package-ecosystem: "npm"
     directory: "/kotlin-js-store"
