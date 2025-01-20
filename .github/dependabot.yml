@@ -18,6 +18,12 @@ updates:
       timezone: Europe/London
     ignore:
       - dependency-name: org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom
+    groups:
+      kotlin:
+        patterns:
+          - "jvm"
+          - "js"
+          - "plugin.serialization"
 
   - package-ecosystem: "npm"
     directory: "/kotlin-js-store"
